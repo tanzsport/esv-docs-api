@@ -1,0 +1,650 @@
+= Schnittstellen
+
+== Anmerkungen zum Datenmodell
+
+* Veranstalter und Veranstalter-ID +
+ist i.d.R. ein Verein, es kann aber auch ein LTV sein oder auch der DTV.
+Es kann auch eine Veranstaltergemeinschaft sein (z.B. eine Gruppe von
+Vereinen), für die im Datenmodell in einer geeigneten Entität ein
+Eintrag vorhanden sein muss +
+Jede Veranstaltung ist eindeutig einem Veranstalter zugeordnet.
+* Ausrichter und Ausrichter-ID +
+ist der Verein oder der Verband (LTV bzw. DTV), der das Turnier
+durchführt. +
+Jedes Turnier ist eindeutig einem Ausrichter zugeordnet.
+* Veranstaltung +
+sind alle Turniere, die ein Veranstalter für ein (auch verlängertes)
+Wochenende angemeldet hat. Beispiele: GOC, Blaues Band der Spree, Hessen
+tanzt, danceComp, Tanzen im Dreiländereck (Aachen). Es ist nötig
+Veranstaltungen als eigenständige Entität mit eigener ID zu erstellen.
+* Starter-ID (übergreifend über alle Tänzer der tänzerischen
+Einheit/Paar/Gruppe etc.) +
+wird innerhalb der ESV-Datenbank für die Verbindung mehrerer Tänzer zu
+einem Starter vergeben. Im Live-Modus kann mit der Starter-ID der
+Aufstiegsdaten-Status eines einzelnen Starters abgefragt werden, was
+aber nur dann möglich sein soll, wenn der Starter für mindestens eines
+der Turniere der Veranstaltung in der Startliste erscheint und damit die
+Starter-ID dem Turnierprogramm bekannt ist.
+* Titel +
+In der bisherigen DTV-Datenbank ist kein Feld für den Titel „Dr.“
+vorhanden. Ein Titel wird bisher in das Feld des Vornamens eingetragen
+(z.B. „Thomas Dr.“). In der ESV-Datenbank sollte ein separates Feld
+dafür vorgesehen werden. Über die Stammdatenerfassung der Personen kann
+jeder Beteiligte selbst entscheiden, ob er den Titel im Sportbetrieb
+führen will.
+* User +
+Über den User ist im ESV-System geregelt, welche Veranstaltungen er
+überhaupt lesen und schreiben darf (z.B. Verein, LTV, etc.)
+* Kennschlüssel +
+Jedes zertifizierte Turnierprogramm soll einen eindeutigen Kennschlüssel
+erhalten, woraus ersichtlich ist, dass es sich um ein bestimmtes
+zertifiziertes Turnierprogramm handelt. Für jede Einzelschnittstelle
+muss hinterlegt werden, ob mit dem jeweiligen Schlüssel lesend,
+schreibend oder gar nicht auf die jeweils angefragte Schnittstelle
+zugegriffen werden kann.
+* Optionale Datenfelder +
+Diese Felder sind grundsätzlich immer im Datensatz vorhanden, ggf.
+werden sie mit NULL gefüllt.
+
+== Anmerkungen zum Ablauf
+
+* Lesen der Startlisten +
+Das Turnierprogramm wird zuerst die Liste der Veranstaltungsdaten (des
+Users) lesen. In einem zweiten Schritt wird es dann die Informationen zu
+den einzelnen Veranstaltungen lesen und in einem dritten Schritt die
+Startlisten der einzelnen Veranstaltungen mit den einzelnen Turnieren.
+Sobald eine Veranstaltung in der Liste der Veranstaltungen vorliegt,
+können die Veranstaltungsdaten und die Startlisten beliebig oft gelesen
+werden. +
+Wird ein Turnierprogramm im Live-Modus betrieben, können die Daten der
+Einzelstarter ebenfalls beliebig oft abgefragt werden.
+
+== Anmerkungen zur Kodierung
+
+* Die JSON-Kodierung erfolgt streng nach Vorgaben aus RFC 4627
+** Strings können alle Unicode-Zeichen enthalten
+*** Anführungszeichen, Backslash und Steuerzeichen (U+0000 bis U+001F)
+müssen escaped werden
+*** Die Unicode-Zeichen von U+0000 bis U+FFFF (Basic Multilingual Plane,
+BMP) können, müssen jedoch nicht als 6 Zeichen lange hexadezimale
+Unicode-Sequenz dargestellt werden (z.B. \u00fc). Alternativ Zeichen
+direkt in UTF-8.
+*** Die Unicode-Zeichen außerhalb des BMP werden als surrogate pair
+dargestellt.
+* Alle JSON-Schnittstellen sollen transparente HTTP-Komprimierung
+unterstützten (gzip, deflate via Accept-Encoding und Content-Encoding)
+
+== Generelle Hinweise
+
+* Alle Datensätze als JSON-Konstrukt
+* Staaten in 3-Buchstaben-Olympiccode, bei den Staaten ohne solchen:
+ISO-3-code
+* Als User und Passwort werden die Vereinsportal-Zugangsdaten verwendet
+* Alle Imports/Exports als UTF-8
+
+== Turnierprogramme
+
+=== Startlisten (lesend)
+
+==== Aufruf Veranstaltung
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: Veranstaltungs-ID (ggf. optional)
+* URL-Parameter: Wettbewerbsart (wenn keine Veranstaltungs-ID angegeben
+wurde)
+
+[source]
+----
+GET /startliste/veranstaltung?id={veranstaltungsId} HTTP/1.1
+oder
+GET /startliste/veranstaltung/{veranstaltungsId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+[source]
+----
+GET /startliste/wettbewerbsart?art={wettbewerbsart} HTTP/1.1
+oder
+GET /startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+==== Abruf der Gesamt-Starterliste
+
+Wird keine Veranstaltungs-ID angegeben, muss die Wettbewerbsart
+angegeben werden, damit die Gesamt-Starterliste für die jeweilige
+Wettbewerbsart für die Offline-Verwendung heruntergeladen werden kann.
+Die Gesamt-Startliste einer Wettbewerbsart enthält aus
+Datenschutzgründen keine Namen der Personen (Feldwerte NULL).
+
+==== Rückgabewerte Veranstaltung
+
+*Global*:
+
+* Gültigkeits-Flag für Meldestand (0 = Turniermeldungen noch nicht
+gestartet, 1 = Meldestand noch nicht final, 2 = Meldestand final)
+
+Erläuterung: +
+Turnierprogramme können die Startdaten ab dem Start der Turniermeldungen
+herunterladen (z.Z. der 21. des Vorvormonats). Der finale Meldestand
+inkl. der aktuellen Aufstiegsdaten kann frühestens am Tag vor dem
+Turnier geladen werden – er wird in diesem Flag als solcher
+gekennzeichnet.
+
+*Starterweise*:
+
+* Starter-ID (übergreifende ID für tänzerische Einheit)
+* Team (optional, nur bei Formations-, Small-Group- und
+Mannschaftswettbewerben)
+** Team-Name (sofern vorhanden, z.B. bei Gruppen+Formationen)
+** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen+Formationen)
+** Team-Trainer (sofern vorhanden, z.B. bei Gruppen+Formationen)
+* Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
+Ersatztänzer):
+** Personen-ID (DTV-Nummer)
+** Titel (nur bei Einzelaufruf Veranstaltung, sonst NULL)
+** Vorname (nur bei Einzelaufruf Veranstaltung, sonst NULL)
+** Nachname (nur bei Einzelaufruf Veranstaltung, sonst NULL)
+** Geschlecht (nur bei Einzelaufruf Veranstaltung, sonst NULL)
+** WDSF-MIN (optional, sofern vorhanden)
+* Club (bei deutschen Paaren Pflicht, sonst optional)
+** Club-ID
+** Club-Name
+** LTV (bei deutschen Paaren Pflicht, sonst optional)
+*** LTV-ID
+*** LTV-Name
+* Staat (Staat, für den der Starter an den Start geht)
+* Meldungen (Array, nicht vorhanden bei Aufruf der Gesamt-Starterliste
+für eine Wettbewerbsart)
+** Turnier-ID (nur die IDs der Turniere der aufgerufenen Veranstaltung)
+** Flag Meldung (Meldung = true, Abmeldung = false)
+** Datum der Meldebestätigung (durch Verein)
+** Startnummer (optional – wird erst später für Ligaturniere relevant
+sein wie JMD und Formation)
+* Startbuch turnierartweise (optional, nur Einzelwettbewerbe St/Lat und
+JMD)
+** Turnierart
+** Startgruppe
+** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
+** Ist-Startklasse (z.B. BSW, D, C,B,A,S,PD) (optional, nur bei
+Einzelwettbewerben St/Lat und JMD)
+** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD-Paare, d.h. „kein Aufstieg
+möglich bei diesem Turnier für dieses Paar und auch nicht als
+mittanzendes Siegerpaar zugelassen“; optional, nur bei
+Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
+** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
+Einzelwettbewerbe JMD)
+*** Ist
+*** Ziel
+** Platzierungen (optional, nur bei Einzelwettbewerben St/Lat, ggf.
+später Einzelwettbewerbe JMD)
+*** Ist
+*** Ziel
+** Regeln (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
+Einzelwettbewerbe JMD)
+*** Mindestpunkte
+*** Platzierung bis Platz (einschließlich)
+** Flag für Laufzetteldruck da Aufstiegschance am Wochenende (optional,
+nur bei Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
+* Flags (wird ggf. später ergänzt, alle optional)
+** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
+
+==== Aufruf Einzelstarter
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: Starter-ID
+* URL-Parameter: Personen-ID, zusammen mit Wettbewerbsart
+
+Aufruf entweder per Starter-ID oder per Personen-ID (und
+Wettbewerbsart).
+
+[source]
+----
+GET /starter?id={starterId} HTTP/1.1
+oder
+GET /starter/{starterId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+[source]
+----
+GET /starter?wettbewerbsart={wettbewerbsart}&person={personenId} HTTP/1.1
+oder
+GET /starter/{wettbewerbsart}/{personenId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabewerte Einzelstarter
+
+* wie Starter-Eintrag aus Veranstaltungsstartliste, jedoch ohne
+Meldungen
+
+=== Ergebnisse (schreibend, evtl. lesend)
+
+Absichtlicher Zeitversatz der Darstellung beim Live-Mode?
+
+Die Ergebnisse eines Turniers können mehrfach geschrieben werden, z.B.
+im Live-Modus nach jeder Runde. Dabei können sich auch die Inhalte des
+übergreifenden Berichtes verändern. Das ESV-System muss erkennen können,
+wann die Daten vollständig sind –wenn die Checksumme enthalten ist, sind
+die Daten komplett (Turnier beendet). Danach können die Ergebnisse noch
+weitere 4 Stunden hochgeladen werden. Nach 4 Stunden lässt das
+ESV-System ein Hochladen nicht mehr zu.
+
+Die übertragene Prüfsumme sollte im ESV-Portal mit einer nach
+Datenerhalt berechneten Prüfsumme verglichen werden und bei
+Nichtübereinstimmung den Admin alarmieren. Solche Ergebnisse sollen
+vorläufig nicht direkt dargestellt werden. Weitere Prüfwerte sind zum
+Beispiel die Endrundenplatzziffern.
+
+==== Aufruf Turnier
+
+* HTTP-Verb: POST
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* HTTP Header: Prüfsumme
+* URL-Parameter: Turnier-ID
+
+[source]
+----
+POST /ergebnis?id={turnierId} HTTP/1.1
+oder
+POST /ergebnis/{turnierId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+X-DTV-Pruefsumme: ff621b
+----
+==== Inhalte
+
+*Übergreifend Bericht*:
+
+* Tänze (Array, max. 10 Tänze)
+** gültige Werte: LW, TG, WW, SF, QS, SB, CC, RU, PD, JV, STD, LAT, JMD,
+DF, SA,..)
+* WR (Array, WR des Turniers)
+** Personen-ID (für DTV-WR Pflicht, für Ersatz-WR optional, für
+Ausländer NULL)
+** Vorname
+** Nachname
+** Club
+*** Club-Name (optional für Ausländer)
+*** LTV-Name (für Ausländer NULL)
+** Staat
+* Turnierleiter (Array, min. 1 Element)
+** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
+konfiguriert)
+* Beisitzer (Array, min. 1 Element)
+** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
+konfiguriert)
+* Chairman (optional) (Array)
+** Analog WR-Einzelement
+* Vorkommnisse (optional)
+* Beginnzeit (ISO8601)
+* Endzeit (ISO8601)
+* Array Rundenablauf
+** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F (Redance=R, bei 1.VR=1A, bei
+2.VR=1B, bei Formations A-Finale=FA, bei B-Finale=FB)
+* kombiniert mit Turnier-ID (optional)
+* Zuschauerzahl
+
+*Zeilenweise Starter*:
+
+* Starter-ID
+* Startnummer
+* Personen (Array, enthält bei Teamwettbewerben alle Starter, die
+tatsächlich getanzt haben)
+** Personen-ID (DTV-Nummer)
+** Vorname
+** Nachname
+** WDSF-MIN (optional, sofern vorliegend)
+* Club
+** Club-ID
+** Club-Name
+** LTV
+*** LTV-ID
+*** LTV-Name
+* Staat
+* Status (teilgenommen = 1, fehlt entschuldigt = 2, fehlt unentschuldigt
+= 3)
+* Meldestatus (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
+Nachmeldung, Aufsteiger = 4)
+* Ergebnis (NULL bei Status 2 oder 3)
+** Platz Von
+** Platz Bis
+** Punkte
+** Platzierungen gesamt (zur Überprüfung in der DB, Adminalarm bei
+Abweichung)
+** Punkte gesamt (zur Überprüfung in der DB, Adminalarm bei Abweichung)
+** Aufstieg (0 = nein, 1 = ja, 2 = ja, durch Beschluss)
+** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten),
+** Flag VD (0 = keine, 1 = Verwarnt Schrittbegrenzung, 2 =
+Disqualifiziert Schrittbegrenzung, 3 = gewöhnliche Disqualifikation)
+* Wertung [Array Runde, WR, Tänze+1]
+** Non-signed Byte für Wertung +
+(bei nur Summenwertung bleiben Felder 0..Tänze-1 leer, bei Einzelkreuze
+sind alle Felder belegt), nicht getanzte Runden werden als NULL
+übertragen, Runden nach Ausscheiden werden gar nicht übertragen
+** Summe Wertungen/Platzziffern
+
+Bei Paaren eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
+haben, sind nur die Namen eingetragen, evtl. der Clubname, aber auch der
+Staat.
+
+==== Rückgabe
+
+Daten erfolgreich angenommen, bzw. Informationen über mögliche Fehler
+(z.B. geschlossen, etc)
+
+=== Veranstaltungsdaten (lesend)
+
+Dieses Interface ist vorrangig für Turnierprogramme gedacht. Das
+Rückgabeformat „Veranstaltung“ könnte aber auch für den
+Tanzsport.de-Turnierkalender Verwendung finden. Deshalb werden mehr
+Werte zurückgegeben als für die Turnierprogramme benötigt.
+
+==== Aufruf Liste
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+
+[source]
+----
+GET /veranstaltungen HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe Liste
+
+Jede Veranstaltung eine Zeile, alle Veranstaltungen in den folgenden 2 Monaten, zu denen der User Berechtigung hat
+
+* Veranstaltungs-ID
+* Datum Von
+* Datum Bis
+* Ort
+* Titel (optional)
+
+==== Aufruf Veranstaltung
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: Veranstaltungs-ID
+
+[source]
+----
+GET /turniere?event={veranstaltungsId} HTTP/1.1
+oder
+GET /turniere/{veranstaltungsId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe Veranstaltung
+
+* Veranstaltung
+** Veranstaltungs-ID
+** Datum Von
+** Datum Bis
+** Turnierstätte
+*** Name
+*** Anschrift (Straße + Nr)
+*** PLZ
+*** Ort
+** Ausrichter-Kontakt
+*** Telefon
+*** E-Mail
+** Titel (optional)
+* Array Flächen
+** Flächen-Bezeichnung (eindeutig innerh. der Veranstaltung)
+** Typ (Text: z.B. Parkett, Kunststoff, Stein)
+** Länge (in Metern; Kommawert z.B. 10,5; Länge ≥ Breite)
+** Breite(in Metern; Kommawert)
+* Array Turniere
+** Turnier-ID
+** Datum Von
+** Datum Bis
+** Startzeit Plan (Zeit, die im Tanzspiegel veröffentlicht wurde)
+** Startzeit Plan Korrigiert (kann, sofern vom Ausrichter verändert auch
+im Terminkalender als veränderte Startzeit kenntlich dargestellt werden)
+** Titel (optional)
+** Veranstalter
+*** ID
+*** Name
+*** LTV
+**** ID
+**** Name
+** Ausrichter
+*** ID
+*** Name
+*** LTV
+**** ID
+**** Name
+** Flächen-ID
+** Wettbewerbsart (z.B. Einzel, Formation, Solo, Duo, BSW)
+** Turnierform
+** Startgruppe
+** Startklasse oder Startliga
+** Turnierart
+** Zulassung (grenzt die zugelassenen Paare ein, z.B. DTV oder auf einen
+oder mehrere LTV;)
+*** Array; mögliche Werte: WDSF, EU, DTV + LTVs
+** Wanderpokal: true/false
+** Turnierrang (numerisch)
+** Flag Aufstiegsturnier (Vergabe von Aufstiegspunkten und
+–platzierungen ja/nein)
+** Ranglisten-ID (optional, bei Ranglistenturnieren und ggf. bei DM)
+** WDSF-Turnier-ID (optional)
+** Startgebühr in EUR (optional)
+
+=== Ranglisten (lesend)
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: RL-ID (Mehrfachnennung mit versch. IDs möglich)
+* URL-Parameter: Stichtag (optional, ohne Angabe letzter Stand)
+
+[source]
+----
+GET /ranglisten?rl={ranglistenId1}&rl={ranglistenId2}&stichtag={stichtag} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+* Global-je-RL: RL-ID, Stand (Datum der letzten Änderung)
+* Array Starter:
+** Starter-ID
+** Rang
+*** Rangliste
+*** Platzierung der vorhergehenden DM
+** Array über alle Personen: [nicht bei Gruppen/Formationen, bei Paaren:
+Herr-ID, Dame-ID,…]
+*** Personen-ID
+*** Titel
+*** Vorname
+*** Nachname
+** Club
+*** ID
+*** Name
+*** LTV
+**** ID
+**** Name
+** RL-Punkte
+
+=== Funktionäre/Lizenzträger (lesend) Einzelaufruf
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: Personen-ID
+
+[source]
+----
+GET /funktionaer?person={personenId} HTTP/1.1
+oder
+GET /funktionaer/{personenId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+* Personen-ID
+* Titel
+* Vorname
+* Nachname
+* Club
+** ID
+** Name
+** LTV
+*** ID
+*** Name
+* Staat
+* Array Lizenz
+** Lizenz-IDs (Auflistung aller gültigen Funktionärs-Lizenzen)
+
+=== Funktionäre/Lizenzträger – Gesamtdatei des DTV (lesend)
+
+Intern mit Gültigkeit 7 Tage
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+
+[source]
+----
+GET /funktionaere HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Turnierprogramm/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+* Array (Elemente wie Einzelaufruf, Namen und Titel NULL)
+
+== DTV-Webseite
+
+=== Verbände (lesend, Liste)
+
+==== Aufruf
+
+* http-header: User+Passwort als BasicAuth
+* http-header: UserAgent: lesendes System inkl. Version +Kennschlüssel
+
+==== Rückgabe Liste
+
+* Verbands-ID
+* Name
+* Typ (z.B. LTV, Fachverband)
+
+=== Vereine (lesend, suchend, Recherche, inkl. Landkarte/Umkreis)
+
+==== Aufruf Suche
+
+* http-header: User+Passwort als BasicAuth
+* http-header: UserAgent: lesendes System inkl. Version +Kennschlüssel
+* URL-Parameter: Suchbegriff Clubname, Suchbegriffe Verband (z.B. TBW or
+HTV über IDs, Mehrfachnennung möglich), Geo-Suche (z.B. Umkreis um
+PLZ/Ort), Aktivitäten (z.B. St/Lat/HipHop…) [alles optional]
+* URL-Parameter: Max Treffer
+* URL-Parameter: Seite
+
+==== Rückgabe Liste
+
+* Vereinsdatensatz (Adresse, Tätigkeitsfelder, Kontakt, Geo, …)
+
+=== Turnierkalender (lesend, Suche)
+
+==== Aufruf Suche
+
+* http-header: User+Passwort als BasicAuth
+* http-header: UserAgent: lesendes System inkl. Version +Kennschlüssel
+* URL-Parameter: Wettbewerbsart (Einzel, Formation St/Lat, JMD
+Formation, JMD Small Group, JMD Solo, JMD Duo; optional)
+* URL-Parameter: Zeitfenster (von, bis; nicht optional)
+* URL-Parameter: Geo-Suche (Umkreis, PLZ; optional)
+* URL-Parameter: Landesverband (mehrfach, optional)
+* URL-Parameter: Kategorie (optional)
+** Einzel: Offen, Meisterschaft/RL, ET, Grenzverkehr, International, BSW
+*** Zus. 2 * Startgruppe, Startklasse, Turnierart
+** Formation St/Lat: Liga, Meisterschaft, ET, International
+*** Zus. Liga, Turnierart
+** JMD Formation
+*** Zus. Liga, Startgruppe
+** JMD-Small Group
+*** Zus. Startgruppe
+** JMD-Solo
+*** Startgruppe, Startklasse, männlich/weiblich/mixed
+** JMD-Duo
+*** Startgruppe, Startklasse, männlich/weiblich/mixed
+
+* Max Treffer
+* Seite
+
+==== Rückgabe Liste
+
+Veranstaltungsdaten-Liste wie für Turnierprogramm, Detail-Anfrage dann
+mit Veranstaltungs-ID, dann Detailantwort wie für Turnierprogramm
+
+=== Lehrgangskalender (lesend, Suche)
+
+=== Ergebnisse (lesend, Suche)
+
+=== Startbuchdaten (lesend, Suche) z.B. für DTV-App
+
+=== Meldesysteme (Clubliste lesend und Meldeeingang schreibend, Bestätigungsstatus lesend)
+
+== Tanzspiegel
+
+=== Turniere (lesend)
+
+=== BSWs (lesend)
+
+=== Schulungen (Lesend)
+
+Formate definiert die Geschäftsstelle
+
+== Vereinswebseiten
+
+=== Ergebnisse der Tänzer für Club-CMS aufbereitet
+
+Rückblickend für begrenzten Zeitraum (z.B. vergangenes Wochenende)
+
+== Ergebniscodes
+
+* 200 OK
+* 404 Resource existiert nicht (Ergebnis, Funktionär, Starter etc.)
+* 403 Login inkorrekt
+* 400 Datenkonstrukt ungültig (Bad request)
+* Token abgelehnt
+* Veranstaltung bereits hochgeladen und Datensatz geschlossen
+* Ergebnisupload nach Frist, Upload unmöglich
+* Ergebnisdatensatz unvollständig (Fehlerdetails im response body)
+* Starter nicht startberechtigt in angefragter Turnierart
+* Datenempfang unvollständig
+
