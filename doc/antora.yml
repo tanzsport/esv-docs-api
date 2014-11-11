@@ -1,0 +1,6 @@
+name: api
+title: API
+version: "0.7"
+start_page: api:index.adoc
+nav:
+  - modules/api/nav.adoc
