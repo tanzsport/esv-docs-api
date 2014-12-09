@@ -1,0 +1,49 @@
+= Schnittstellen Externe Systeme
+
+== Änderungshistorie
+
+*6.12.2014 / Version 1.0*
+
+* Dokumente gesplittet und Interfacereihenfolge überarbeitet
+
+== Meldesysteme
+
+=== Meldeeingang schreiben
+
+==== Aufruf
+
+* HTTP-Verb: POST
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Turnier-ID
+* URL-Parameter: Starter-ID
+* URL-Parameter: Meldung/Abmeldung
+
+Antwort mit http-Ergebniscode
+
+=== Bestätigungsstatus lesend
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Turnier-ID
+* URL-Parameter: Starter-ID
+
+Antwort mit http-Ergebniscode (zzgl. Codes für noch offen, bestätigt,
+abgelehnt)
+
+== Vereinswebseiten
+
+=== Ergebnisse der Tänzer für Club-CMS aufbereitet
+
+Rückblickend für begrenzten Zeitraum (z.B. vergangenes Wochenende) +
+ +
+Anfrage: Datum, Zeitraum, Club
+
+Ergebnis:
+
+Array aller Ergebnisse der letzten Woche (falls Zeitraum leer)
+
+StarterID, TurnierID, Platz, Punkte

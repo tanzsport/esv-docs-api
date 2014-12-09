@@ -1,0 +1,446 @@
+= Schnittstellen DTV-Webseite
+
+== Änderungshistorie
+
+*6.12.2014 / Version 1.0*
+
+* Dokumente gesplittet und Interfacereihenfolge überarbeitet
+
+== DTV-Webseite
+
+=== Verbände (lesend, Liste)
+
+==== Aufruf
+
+* HTTP-Verb: GET/HEAD
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* HTTP-Header: If-Modified-Since/If-None-Match
+* URL-Parameter: Typ
+
+==== Antwort
+
+* Array Verbände
+** Verbands-ID
+** Name
+** Kurzname
+** Bundesland (nur bei Landesverbänden)
+** Typ (z.B. LTV, Fachverband)
+
+HTTP-Response soll nach Möglichkeit Response-Header enthalten, die ein
+effizientes Caching erlauben (Last-Modified oder E-Tag).
+
+=== Vereine (lesend, suchend, Recherche, inkl. Landkarte/Umkreis)
+
+==== Aufruf Suche
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Suchbegriff Clubname, Suchbegriffe Verband (z.B. TBW or
+HTV über IDs, Mehrfachnennung möglich), Geo-Suche (z.B. Umkreis um
+PLZ/Ort), Tätigkeitsfelder/Aktivitäten (z.B. St/Lat/HipHop…) [alles
+optional]
+* URL-Parameter: Max Treffer (pro Seite)
+* URL-Parameter: Seite
+
+==== Rückgabe Liste
+
+Vereinsdatensatz (Adresse, Tätigkeitsfelder/Aktivitäten, Kontakt, Geo,
+…)
+
+=== Kategorien (lesend)
+
+Rückgabe der Suchkategorien für den Turnierkalender nach Wettbewerbsart.
+
+==== Aufruf
+
+* HTTP-Verb: GET/HEAD
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* HTTP Header: If-Modified-Since/If-None-Match
+* URL-Parameter: Wettbewerbsart (nicht optional)
+
+[source]
+----
+GET /kategorien/{wettbewerbsart} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Antwort
+
+* Array von Kategorien
+** Name
+** Kennzeichen
+** Ausland (true/false)
+
+HTTP-Response soll nach Möglichkeit Response-Header enthalten, die ein
+effizientes Caching erlauben (Last-Modified oder E-Tag).
+
+=== Regelwerk (lesend)
+
+Rückgabe der möglichen Parameter für den Suchparameter „Turnier“ in der
+Turnierdatenbank je nach Wettbewerbsart. Dabei werden nur die
+grundsätzlich möglichen Kombinationen der Einzelparameter zurückgegeben
+(keine Abhängigkeit von der Turnierform oder der Kategorie) – siehe
+Excel-Datei. Die Liste kann durch die optionalen URL-Parameter
+eingeschränkt werden.
+
+==== Aufruf
+
+* HTTP-Verb: GET/HEAD
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* HTTP Header: If-Modified-Since/If-None-Match
+* URL-Parameter: Wettbewerbsart (nicht optional)
+** Einzelwettbewerbe St/Lat
+*** URL-Parameter: Startgruppe (optional)
+*** URL-Parameter: Startklasse (optional)
+*** URL-Parameter: Turnierat (optional)
+** Formationswettbewerbe St/Lat und JMD, Smallgroupwettbewerbe JMD
+*** URL-Parameter: Startgruppe (optional)
+*** URL-Parameter: Startliga (optional)
+*** URL-Parameter: Turnierart (optional)
+** Solo- und Duowettbewerbe JMD
+*** URL-Parameter: Startgruppe (optional)
+*** URL-Parameter: Startklasse (optional)
+*** URL-Parameter: Turnierart (optional)
+*** URL-Parameter: Geschlecht (optional)
+
+[source]
+----
+GET /regelwerk/{wettbewerbsart}?param1={param1}&param2={param2} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Antwort
+
+* Array von „Regelwerksdatensätzen“ (vollständig oder gefiltert)
+** Einzelwettbewerbe St/Lat
+*** Startgruppe
+*** Startklasse
+*** Turnierart
+** Formationswettbewerbe St/Lat und JMD, Smallgroupwettbewerbe JMD
+*** Startgruppe
+*** Startliga (bei Small Groups immer NULL)
+*** Turnierart (bei JMD immer JMD)
+** Solo- und Duowettbewerbe JMD
+*** Startgruppe
+*** Startklasse
+*** Turnierart (immer JMD)
+*** Geschlecht (bei Duo immer NULL)
+
+HTTP-Response soll nach Möglichkeit Response-Header enthalten, die ein
+effizientes Caching erlauben (Last-Modified oder E-Tag).
+
+=== Turnierkalender (lesend, Einzelaufruf und Suche)
+
++++Beschreibung eines sinnvollen Suchalgorithmus:+++
+
+Die Suche erfolgt getrennt nach Wettbewerbsarten, da sich die
+unterschiedlichen Suchparameter nur schlecht über die Wettbewerbsarten
+kombinieren lassen. Lediglich bei JMD Solo/Duo wäre eine Zusammenfassung
+denkbar, sinnvoll und gewünscht.
+
+Prinzipiell wird immer nach Turnieren in einem bestimmten Zeitfenster
+gesucht. Diese Parameter lassen sich auf alle Turniere anwenden.
+
+Ferner wird zwischen Turnieren im Inland und im Ausland unterschieden.
+Die Turniere werden nach Kategorien gruppiert, die eine Zusammenfassung
+der einzelnen Turnierformen darstellen.
+
+* Inland
+** Kategorie „Meisterschaft“
+** Kategorie „Rangliste“
+** Kategorie „Offen“
+** Kategorie „International (Inland)“ (II)
+** Kategorie „Einladung“
+* Ausland (bisher nur Einzelwettbewerbe St/Lat)
+** Kategorie „Grenzverkehr“
+** Kategorie „International (Ausland)“ (IA)
+
+Die Auslandsturniere werden von der DTV-Geschäftsstelle nur für den
+Tanzspiegel und die Turnierdatenbank erfasst. Da sich die Suchparameter
+Geo, Landesverband und „Turnier“ (Startgruppe, Startklasse, Turnierart,
+Liga etc.) hier nicht sinnvoll anwenden lassen, dürfen diese
+Einschränkungen des Suchergebnisses nicht für die Auslandskategorien
+angewendet werden.
+
+Die Inlandsturniere werden über die Suchparameter
+
+* Geo-Suche
+* Landesverband
+* und „Turnier“
+
+eingeschränkt.
+
+Der Suchparameter „Turnier“ besteht je nach Wettbewerbsart aus
+unterschiedlichen Einzelparametern:
+
+* Einzelwettbewerbe Standard/Latein
+** Startgruppe
+** Startklasse
+** Turnierart
+* Formationswettbewerbe Standard/Latein
+** (Startgruppe – inhaltlich obsolet, da immer Hgr)
+** Startliga
+** Turnierart
+* Formationswettbewerbe JMD
+** Startgruppe
+** Startliga
+** (Turnierart – inhaltlich obsolet, da immer JMD)
+* Smallgroupwettbewerbe JMD
+** Startgruppe
+** (Turnierart – inhaltlich obsolet, da immer JMD)
+* Solowettbewerbe JMD
+** Startgruppe
+** (Startklasse – z.Zt. obsolet, da immer A)
+** (Turnierart – inhaltlich obsolet, da immer JMD)
+** Geschlecht: m, w, uni
+* Duowettbewerbe JMD
+** Startgruppe
+** (Startklasse – z.Zt. obsolet, da immer A)
+** (Turnierart – inhaltlich obsolet, da immer JMD)
+
+Der Suchparameter „Turnier“ soll mehrfach (mind. jedoch zweifach)
+angegeben werden können und durch eine Konjunktion oder Disjunktion
+verbunden werden. Das soll gewährleisten, dass Doppelstarter nach
+Turnieren der gleichen Startklasse und Turnierart in min. zwei
+Startgruppen suchen können (z.B. Jun I D St, Jun II D St).
+
+Bei der zeitgleichen Suchen nach Turnieren im In- und Ausland muss
+darauf geachtet werden, dass die nur für Inlandsturniere gültigen
+Parameter nicht auf Auslandsturniere angewandt werden (z.b. durch
+Trennung der Abfrage in zwei Teile und Zusammenführung via SQL Union).
+
+Die möglichen Kombinationen für den Suchparameter „Turnier“ liefert das
+Regelwerk-Interface. Die möglichen Werte für den Suchparameter
+„Landesverband“ liefert das Landesverbandsinterface.
+
+Die Parameter für die Geo-Suche müssen noch gemeinsam erörtert werden.
+
+==== Einzelaufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Turnier-ID
+
+==== Aufruf Suche
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Turnierprogramm inkl. Version +
+Kennschlüssel)
+* URL-Parameter: Wettbewerbsart (Einzel, Formation St/Lat, JMD
+Formation, JMD Small Group, JMD Solo, JMD Duo; nicht optional)
+* URL-Parameter: Zeitfenster (von, bis; nicht optional)
+* URL-Parameter: Geo-Suche (Umkreis, PLZ; optional)
+* URL-Parameter: Landesverband (mehrfach, optional)
+* URL-Parameter: Kategorie (optional)
+** Einzel: Meisterschaft, Rangliste, Offen, International (Inland),
+Einladung, Grenzverkehr, International (Ausland)
+** Formation St/Lat: Meisterschaft, Liga, Einladung
+** JMD Formation: Meisterschaft, Liga, Einladung
+** JMD-Small Group: Meisterschaft, Rangliste, Offen
+** JMD-Solo: Meisterschaft, Rangliste, Offen, Einladung
+** JMD-Duo: Meisterschaft, Rangliste, Offen, Einladung
+
+* URL-Parameter: „Turnier“ (s.o. – optional, mehrfach)
+* URL-Parameter: Konjunktion (für Mehrfachparameter Turnier, optional,
+default false)
+* Max Treffer
+* Seite
+
+==== Rückgabe Liste
+
+Einzelne Veranstaltungsdaten wie für Turnierprogramm aber als Array über
+alle in Frage kommenden Veranstaltungen. Mehrtägige Veranstaltungen
+werden pro Treffertag komplett (alle Veranstaltungstage) zurückgemeldet.
+
+=== Lehrgangskalender (lesend, Suche)
+
+=== Ergebnisupdates (lesend, Suche)
+
+Liefert eine Liste Turniere bei denen aktuelle Turnierergebnisse
+vorliegen. Ergebnisdatensätze werden nur zurückgemeldet, wenn mindestens
+die Startliste hochgeladen wurde. +
+Sortierung nach Zeitstempel der letzten Datenänderungen absteigend
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* HTTP Header: If-Modified-Since/If-None-Match
+* URL-Parameter: Wettbewerbsart (Einzel, Formation St/Lat, JMD
+Formation, JMD Small Group, JMD Solo, JMD Duo; optional)
+* URL-Parameter: Zeitfenster (von, bis; optional)
+* URL-Parameter: Geo-Suche (Umkreis, PLZ; optional)
+* URL-Parameter: Landesverband (mehrfach, optional)
+* URL-Parameter: max. Treffer (optional, Standard 10)
+* URL-Parameter: Seite (optional, Standard 1)
+
+[source]
+----
+GET /ergebnisse?wettbewerbsart={wettbewerbsart}&datumVon={datumVon}
+&datumBis={datumBis}&ltv={ltv}&max={maxTreffer}&seite={seite} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Antwort
+
+* Array Turniere mit Ergebnissen
+** Turnier-ID
+** Datum von
+** Datum bis
+** Wettbewerbsart
+** Turnierform
+** Startgruppe
+** Startklasse oder Startliga
+** Turnierart
+** Titel
+** Veranstaltung
+*** Veranstaltungs-ID
+*** Titel
+*** Turnierstätte
+**** PLZ
+**** Ort
+** Status (Startliste, Zwischenergebnis, abgeschlossen)
+** letzte abgeschlossene Runde (NULL, falls Turnier noch nicht
+gestartet)
+** Zeitstempel der letzten Ergebnis-Einspielung
+** Link zur Ergebniswebseite
+
+HTTP-Response soll nach Möglichkeit Response-Header enthalten, die ein
+effizientes Caching erlauben (Last-Modified oder E-Tag).
+
+=== Startbuchdaten (lesend) z.B. für DTV-App
+
+==== Aufruf
+
+* HTTP-Verb: GET/HEAD
+* Authentisierung via OAuth2 oder HTTP-Header: Personen-ID+Passwort als
+Basic Authentication
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* HTTP Header: If-Modified-Since/If-None-Match
+* URL-Parameter: Max Treffer (pro Seite)
+* URL-Parameter: Seite (Seite 1=neueste, Seite n=älteste)
+* URL-Parameter: Startbuch (optional, alle, oder z.B. nur Standard oder
+Funktionär)
+
+==== Antwort
+
+* Array über die Startbücher (Turnierarten und Typen)
+** Typ (Sportler, Funktionär)
+** Turnierart (nur Sportler)
+** Nächster Start Altersgruppe (nur Sportler)
+** Nächster Start Turnierklasse (nur Sportler)
+** Restpunkte bis Aufstieg (nur Sportler)
+** Restplatzierungen bis Aufstieg (nur Sportler)
+** Startsperre aktiv bis Datum
+** Array Rangliste (wenn nicht Ranglistenpaar: null, sonst: über alle
+beteiligten Ranglisten)
+*** Ranglisten-ID
+*** Ranglistenname
+*** aktueller Ranglistenplatz
+*** aktuelle Summe Ranglistenpunkte
+** Array Startbuchdaten
+*** Laufende Nummer
+*** Typ (Teilnahme, Infozeile)
+*** Inhalt (Typ Teilnahme)
+**** Veranstaltungs-ID
+**** Veranstaltungstitel (optional)
+**** Turnier-ID
+**** Turnierdatum (Turnierbeginn bei mehrtägig)
+**** Ausrichter
+**** Turnierort
+**** Turnierform
+**** Turnierrang
+**** Turniertitel (optional)
+**** Wettbewerbsart
+**** Turnierart
+**** Altersgruppe
+**** Klasse/Liga
+**** Funktion (TL, WR, BS, CHM; nur Funktionär)
+**** Platz (nur Sportler)
+**** Max. Platz in Turnier (nur Sportler)
+**** Punkte (nur Sportler)
+**** IstPlatzierung (nur Sportler)
+**** Summe Punkte (nur Sportler)
+**** Summe Platzierungen (nur Sportler)
+**** Flag Verwarnung, Disqualifizierung,
+nicht-Aufstiegsrelevant-da-zu-spät-hochgeladen
+**** Link zur Ergebniswebseite
+*** Inhalt (Typ Infozeile)
+**** Datum
+**** Infotext (z.B.: Aufstieg, Alterswechsel, Trennung,
+Neuzusammenstellung, Buch geschlossen)
+
+HTTP-Response soll nach Möglichkeit Response-Header enthalten, die ein
+effizientes Caching erlauben (Last-Modified oder E-Tag).
+
+== Tanzspiegel
+
+=== Turniere (lesend)
+
+Aktuelle Zusammenfassung der Kategorien (siehe Turnierdatenbank) zu
+Abschnitten im Tanzspiegel -
+
+[cols=",,",options="header",]
+|===
+|Wettbewerbsart |Abschnitt |Kategorien
+|Einzel St/Lat |Offene Turniere a|
+Meisterschaften
+
+Ranglistenturniere
+
+Offene Turniere
+
+| |Einladungsturniere |Einladungsturniere
+| |Grenzverkehr |Grenzverkehr
+| |Internationale Turniere |Internationale Turniere Inland/Ausland
+|Formationen St/Lat |Formationsturniere a|
+Meisterschaften
+
+Ligaturniere
+
+Einladung
+
+|Formationen JMD |JMD a|
+Meisterschaften
+
+Ligaturniere
+
+Einladung
+
+|Small Groups JMD | a|
+Meisterschaften
+
+Ranglistenturniere
+
+Offene Turniere
+
+|Solo/Duo JMD | a|
+Meisterschaften
+
+Ranglistenturniere
+
+Offene Turniere
+
+Einladung
+
+a|
+TAF
+
+(nur nachrichtlich zum Abdruck)
+
+| |keine – wird geklärt!
+|===
+
+=== BSWs (lesend)
+
+=== Schulungen (Lesend)

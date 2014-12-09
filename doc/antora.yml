@@ -1,6 +1,8 @@
 name: api
 title: API
-version: "0.7"
-start_page: api:index.adoc
+version: "1.0"
+start_page: api-scrutiny:index.adoc
 nav:
-  - modules/api/nav.adoc
+  - modules/api-scrutiny/nav.adoc
+  - modules/api-external/nav.adoc
+  - modules/api-dtv/nav.adoc

@@ -1,8 +1,0 @@
-.Allgemeines
-* xref:index.adoc#_schnittstellen[Einleitung]
-
-.Schnittstellen
-* xref:index.adoc#_turnierprogramme_2[Turnierprogramme]
-* xref:index.adoc#_dtv_webseite_2[DTV-Webseite]
-* xref:index.adoc#_tanzspiegel_2[Tanzspiegel]
-* xref:index.adoc#_vereinswebseiten_2[Vereinswebseiten]
