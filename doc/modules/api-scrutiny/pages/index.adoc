@@ -27,6 +27,11 @@ Wertungen, Wertungstabellen und Digitale Wertungen überarbeitet)
 * Digitale Wertungsrichterzettel JSON überarbeitet und Felder aus dem
 eigentlichen Ergebnisdatensatz rausgenommen. Ist getrennt zu übertragen
 
+*21.01.2015 / Version 1.1*
+
+* Ergebnisupload überarbeitet
+* Starterdownload überarbeitet
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -343,9 +348,9 @@ JMD)
 ** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
 ** Ist-Startklasse (z.B. BSW, D, C,B,A,S,PD) (optional, nur bei
 Einzelwettbewerben St/Lat und JMD)
-** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD-Paare, d.h. „kein Aufstieg
-möglich bei diesem Turnier für dieses Paar und auch nicht als
-mittanzendes Siegerpaar zugelassen“; optional, nur bei
+** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare, d.h.
+„kein Aufstieg möglich bei diesem Turnier für dieses Paar und auch nicht
+als mittanzendes Siegerpaar zugelassen“; optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 ** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
 Einzelwettbewerbe JMD)
@@ -363,6 +368,7 @@ Einzelwettbewerbe JMD)
 *** Laufzetteldruck da Aufstiegschance am Wochenende (optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 *** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
+*** Startsperre-bis-Datum
 
 ==== Aufruf Einzelstarter
 
@@ -569,7 +575,7 @@ konfiguriert)
 * Vorkommnisse (optional)
 * Beginnzeit (ISO8601)
 * Endzeit (ISO8601)
-* Array Rundenablauf
+* Array Rundenablauf (NULL für Upload von nur-Startlisten)
 ** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
 B-Finale=FB)
@@ -577,7 +583,7 @@ B-Finale=FB)
 (Kreuze{0..1}=K, Mannschaftspunkte{1..1,5..2..2,5..3}=M,
 Finalplätze{1..x}=P, FormationswertungKreuze=FK,
 FormationswertungPlätze=FP, JMD-WertungenKreuze=JK,
-JMD-WertungenPlätze=JP)
+JMD-WertungenPlätze=JP, JudgingSystem2.x=JS)
 * kombiniert mit Turnier-ID (optional)
 * Zuschauerzahl
 
@@ -607,7 +613,8 @@ tatsächlich getanzt haben)
 = 3)
 * Meldestatus (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
 Nachmeldung, Aufsteiger = 4)
-* Ergebnis (NULL bei Status 2 oder 3)
+* Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
+nur-Startliste)
 ** Platz Von
 ** Platz Bis
 ** Punkte
@@ -618,8 +625,8 @@ Abweichung)
 ** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten),
 ** Flag VD (0 = keine, 1 = Verwarnt Schrittbegrenzung, 2 =
 Disqualifiziert Schrittbegrenzung, 3 = gewöhnliche Disqualifikation)
-* Wertung [Array Runde, WR, Tänze+1]
-** Array Vorrunden (Kreuz+Mannschaftspunkt-Wertungen)
+* Wertung [Array Runde, WR, Tänze+1*]
+** Array Vorrunden (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
 ***** Tänze 1-x: Float für Wertung (Einzelkreuze, sonst NULL)
@@ -627,7 +634,8 @@ Disqualifiziert Schrittbegrenzung, 3 = gewöhnliche Disqualifikation)
 nicht getanzte Runden werden als NULL übertragen, Runden nach
 Ausscheiden werden gar nicht übertragen
 * Summe Wertungen über alle Tänze und alle WR
-* Array Endrunden (Final-Platz-Wertungen, bei Mannschaft nur
+* Summe Float JudgingSystem2.x [nur bei JS]
+* Array Endrunden (nur Final-Platz-Wertungen, bei Mannschaft nur
 Vorrundenarray)
 ** Array Tänze
 *** Array WR+2
@@ -637,18 +645,21 @@ Ausscheiden werden gar nicht übertragen
 **** WR+1: Platzziffer
 **** WR+2: Platzziffer Summe
 
-* Array Endrundentabelle (Reihenfolge aus Rundenablauf, nur bei
-B/A-Finals relevant)
+*Einmal*:
+
+* Array Endrundentabelle (optional, nur bei Plätzewertungen P, FP, JP.
+Reihenfolge aus Rundenablauf, nur bei B/A-Finals relevant, vor
+Turnierende NULL)
 ** Array Tänze
-*** Array über Paare (Zeilen im heute gedruckten Dok)
+*** Array über Endrundenstarter (Zeilen im heute gedruckten Dok)
 **** Array über Plätze (Spalten im heute gedruckten Dok)
 ***** Anzahl (Wert, solange in Ausrechnung benötigt. NULL, wenn
 Ausrechnung in früherer Spalte beendet)
 ***** Summe (optional, ggf. NULL)
 * Array Skatingtabelle (optional sofern nötig. Reihenfolge aus
-Rundenablauf, nur bei B/A-Finals relevant)
+Rundenablauf, nur bei B/A-Finals relevant, vor Turnierende NULL)
 ** Skating Regel 10
-*** Array über Paare
+*** Array über Endrundenstarter
 **** Array über Plätze
 ***** Anzahl (Wert, solange in Ausrechnung benötigt. NULL, sonst)
 ***** Summe (optional, ggf. NULL)
@@ -660,7 +671,7 @@ Rundenablauf, nur bei B/A-Finals relevant)
 ***** Summe (optional, ggf. NULL)
 **** Platz (sofern in Regel 11 bestimmt, sonst NULL)
 
-Bei Paaren eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
+Bei Startern eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
 haben, sind nur die Namen eingetragen, evtl. der Clubname, aber auch der
 Staat.
 
@@ -703,7 +714,7 @@ virtuelle Tänze +
 ** Kreuzvorgabe bis (bei Finale NULL)
 ** Array über Starter
 *** Startnummern
-*** Array über Tänze
+*** Array über Tänze (bzw. Wertungsgebiete bei Formation oder JMD)
 **** Float Wertung
 *** Float Summe Wertung (NULL bei Platzwertung)
 ** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 pixels)
