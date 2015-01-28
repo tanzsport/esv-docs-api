@@ -32,6 +32,11 @@ eigentlichen Ergebnisdatensatz rausgenommen. Ist getrennt zu übertragen
 * Ergebnisupload überarbeitet
 * Starterdownload überarbeitet
 
+*28.01.2015 / Version 1.2*
+
+* Ergebnisupload, Punkt Startbuch->Ziel-Startklasse überarbeitet
+* Prüfsummenmechanismus ergänzt
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -348,9 +353,10 @@ JMD)
 ** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
 ** Ist-Startklasse (z.B. BSW, D, C,B,A,S,PD) (optional, nur bei
 Einzelwettbewerben St/Lat und JMD)
-** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare, d.h.
-„kein Aufstieg möglich bei diesem Turnier für dieses Paar und auch nicht
-als mittanzendes Siegerpaar zugelassen“; optional, nur bei
+** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare/alle
+Doppelstartpaare, die nicht weiter aufsteigen können, d.h. „kein
+Aufstieg möglich bei diesem Turnier für dieses Paar und
+auch nicht als mittanzendes Siegerpaar zugelassen“; optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 ** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
 Einzelwettbewerbe JMD)
@@ -529,6 +535,9 @@ Punkt+Platzierungssummen darzustellen. Es muss klar hervorgehoben
 werden, dass diese Ergebnisse vorläufiger Natur sind). Aufstiege und
 Gesamtsummen werden erst nach Ablauf des Turnierwochenendes (alle
 Uploads eingetroffen) dargestellt.
+
+Die Prüfsumme besteht aus den ersten 6 Stellen des SHA-1-Hashs des
+JSON-Datenstreams.
 
 ==== Aufruf Turnier
 
