@@ -37,6 +37,17 @@ eigentlichen Ergebnisdatensatz rausgenommen. Ist getrennt zu übertragen
 * Ergebnisupload, Punkt Startbuch->Ziel-Startklasse überarbeitet
 * Prüfsummenmechanismus ergänzt
 
+*06.02.2015 / Version 1.3*
+
+* Veranstaltungsdownload: Flag entfernt
+* Startlistendownload: Startbuchdaten sind ein Array über alle
+betroffenen Turnierarten
+* Startlistendownload: Startsperre-Flag eingefügt
+* Ranglistendownload um ein Feld erweitert
+* Ergebnisupload: Platz-Felder erweitert
+* Abkürzungen hinten angefügt
+* Fehlercodes vergeben
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -119,15 +130,18 @@ unterstützten (gzip, deflate via Accept-Encoding und Content-Encoding)
 == Ergebniscodes
 
 * 200 OK
-* 404 Resource existiert nicht (Ergebnis, Funktionär, Starter etc.)
 * 403 Login inkorrekt
 * 400 Datenkonstrukt ungültig (Bad request)
-* Token abgelehnt
-* Veranstaltung bereits hochgeladen und Datensatz geschlossen
-* Ergebnisupload nach Frist, Upload unmöglich
-* Ergebnisdatensatz unvollständig (Fehlerdetails im response body)
-* Starter nicht startberechtigt in angefragter Turnierart
-* Datenempfang unvollständig
+* 404 Ressource existiert nicht (Ergebnis, Funktionär, Starter etc.)
+* 601 Token abgelehnt
+* 602 Veranstaltung bereits hochgeladen und Datensatz geschlossen
+* 603 Ergebnisupload nach Frist, Turnier wird der nächsten Woche
+zugerechnet
+* 604 Ergebnisdatensatz unvollständig (Fehlerdetails im response body)
+* 605 Starter nicht startberechtigt in angefragter Turnierart
+* 606 Datenempfang unvollständig
+* 610 Zugriff zur Sandbox abgelehnt, Turnier-ID des Arbeitssystems
+verwendet
 * Ergebniscodes für Meldeeingänge (z.B. OK, nicht erlaubt, abgelehnt da
 Doppelmeldung…)
 * Ergebniscodes für Meldebestätigungen (noch offen, bestätigt,
@@ -250,8 +264,6 @@ oder mehrere LTV;)
 ** Turnierrang (numerisch)
 ** Flag Aufstiegsturnier (Vergabe von Aufstiegspunkten und
 –platzierungen ja/nein)
-** Flag Ergebnisse nach Gesamtturnier hochladen (nur bei kombinierten
-Turnieren, aktuell nur bei DM Sen.I/II S Kombi)
 ** Ranglisten-ID (optional, bei Ranglistenturnieren und ggf. bei
 DM)
 ** WDSF-Turnier-ID (optional)
@@ -346,8 +358,10 @@ für eine Wettbewerbsart)
 ** Datum der Meldebestätigung (durch Verein)
 ** Startnummer (optional – wird erst später für Ligaturniere relevant
 sein wie JMD und Formation)
-* Startbuch turnierartweise (optional, nur Einzelwettbewerbe St/Lat und
-JMD)
+** Flag Startsperre (true/false)
+* Array Startbuch turnierartweise (optional, nur Einzelwettbewerbe
+St/Lat und JMD, nur Turnierarten für die ein elektronisches Startbuch
+vorliegt, in der Übergangszeit ggf. komplett leer)
 ** Turnierart
 ** Startgruppe
 ** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
@@ -355,8 +369,7 @@ JMD)
 Einzelwettbewerben St/Lat und JMD)
 ** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare/alle
 Doppelstartpaare, die nicht weiter aufsteigen können, d.h. „kein
-Aufstieg möglich bei diesem Turnier für dieses Paar und
-auch nicht als mittanzendes Siegerpaar zugelassen“; optional, nur bei
+Aufstieg möglich bei diesem Turnier für dieses Paar“; optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 ** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
 Einzelwettbewerbe JMD)
@@ -374,7 +387,6 @@ Einzelwettbewerbe JMD)
 *** Laufzetteldruck da Aufstiegschance am Wochenende (optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 *** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
-*** Startsperre-bis-Datum
 
 ==== Aufruf Einzelstarter
 
@@ -448,6 +460,8 @@ Herr-ID, Dame-ID,…]
 **** ID
 **** Name
 ** RL-Punkte
+** Anz. teilgenommene Turniere in der Saison (evtl. verwendbar für die
+DM-Warnung in Std/Lat)
 
 === Funktionäre/Lizenzträger (lesend) Einzelaufruf
 
@@ -624,8 +638,12 @@ tatsächlich getanzt haben)
 Nachmeldung, Aufsteiger = 4)
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
 nur-Startliste)
-** Platz Von
-** Platz Bis
+** Platz-Gesamtergebnis Von
+** Platz-Gesamtergebnis Bis
+** Platz-Eigenes-Turnier Von (z.B. nach Anhang 5, NULL wenn nicht
+benötigt)
+** Platz-Eigenes-Turnier Bis (z.B. nach Anhang 5, NULL wenn nicht
+benötigt)
 ** Punkte
 ** Platzierungen gesamt (zur Überprüfung in der DB, Adminalarm bei
 Abweichung)
@@ -727,3 +745,86 @@ virtuelle Tänze +
 **** Float Wertung
 *** Float Summe Wertung (NULL bei Platzwertung)
 ** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 pixels)
+
+== Schlüsselverzeichnis
+
+=== LTVs
+
+HATV, HTV, LTV Berlin, LTV Br, LTV Bremen, LTVB, LTVS, NTV, SLT, TBW,
+TMV, TNW, TRP, TSH, TTSV, LTVSA
+
+=== Wettbewerbsarten
+
+Einzel, Formation Std/Lat, Mannschaft, Solo, Solo männlich, Solo
+weiblich, Duo, Small Group, Formation JMD
+
+=== Turnierformen
+
+DM (Deutsche Meisterschaft), DP (Deutschlandpokal), DC (Deutschlandcup),
+RLT (Rangliste), +
+RSRLT (Rising Star Rangliste), GM (Gebietsmeisterschaft), LM
+(Landesmeisterschaft), OT (Offenes Turnier), ET (Einladungsturnier), IET
+(Int. Einladungsturnier), IM (Int. Meisterschaft), IT (Int. Turnier),
+PDT (PD Trophy), LT (Ligaturnier), IMK (Int. Länderkampf Mannschaft), MK
+(Mannschaftskampf), +
+RM (Regionalmeisterschaft JMD)
+
+=== Startgruppen
+
+Kin.I, Kin.II, Kin., Jun.I, Jun.II, Jug., Hgr., Hgr.II, Sen.I, Sen.II,
+Sen.III, Sen.IV, U21, MC.I, MC.II
+
+Ggf. Kombinationen aus diesen Abkürzungen (z.B. Jug./Hgr., Sen.I/II)
+
+=== Startklassen
+
+BSW, D, C, B, A, S, PD, 1.BL, 2.BL, RL, OL, LL, VL
+
+=== Turnierarten
+
+Std, Lat, Kmb, JMD, SD-Std, SD-Lat
+
+=== Ranglisten-IDs
+
+Jun.II-Std, Jun.II-Lat, Jug-Std, Jug-Lat, Hgr-Std, Hgr-Lat, Hgr-RS-Std,
+Hgr-RS-Lat, Sen.I-Std, Sen.II-Std, G55-Std, LS66-Std, Jug-SoloM-JMD,
+Jug-SoloW-JMD, Jug-Duo-JMD, Jug-SG-JMD, Hgr-SoloM-JMD, Hgr-SoloW-JMD,
+Hgr-Duo-JMD, Hgr-SG-JMD
+
+=== Lizenztypen
+
+Mehrfachnennung im Interface sehr wahrscheinlich
+
+*Turnierleiter*: +
+TL, TL-JMD
+
+*WR-Einzel*: +
+WR-D (alle aktiven C-Tänzer mit WR-C), WR-C, WR-B (alle aktiven
+A-Tänzer mit WR-A), WR-A-Std, WR-A-Lat, WR-S-Std, WR-S-Lat, WR-S-RL-Std,
+WR-S-RL-Lat, WR-S-DM-Std, WR-S-DM-Lat
+
+Bemerkung: Bei Angabe von WR-D oder WR-B sollen keine höheren, weiteren
+Lizenzwerte übertragen werden.
+
+*WR-Formation Std/Lat:* +
+WR-F1, WR-F2, WR-F-BL, WR-F-DM,
+
+*WR-JMD*: +
+WR-J1, WR-J2, WR-J1-DM, WR-J2-DM
+
+=== Tänze
+
+LW, TG, WW, SF, QS, SB, CC, RU, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
+
+=== Runden
+
+1, R, 2, 3, 4, 5, 6, 7, 8, 9, F +
+(Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
+B-Finale=FB)
+
+=== Wertungstyp
+K (Kreuze), M (Mannschaftspunkte{1..1,5..2..2,5..3}), P
+(Finalplätze{1..x}), +
+FK (FormationswertungKreuze), FP (FormationswertungPlätze), JK
+(JMD-WertungenKreuze), +
+JP (JMD-WertungenPlätze), JS (JudgingSystem2.x)
