@@ -48,6 +48,12 @@ betroffenen Turnierarten
 * Abkürzungen hinten angefügt
 * Fehlercodes vergeben
 
+*13.02.2015 / Version 1.4*
+
+* Alle GET/POST-Aufrufe auf vereinbarten Modus reduziert
+* Einzelstarteraufruf erweitert
+* Ergebnisupload um Clubdaten bereinigt
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -164,7 +170,7 @@ Werte zurückgegeben als für die Turnierprogramme benötigt.
 
 [source]
 ----
-GET /veranstaltungen HTTP/1.1
+GET /api/v1/veranstaltungen HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -188,9 +194,7 @@ Jede Veranstaltung eine Zeile, alle Veranstaltungen in den folgenden 2 Monaten b
 
 [source]
 ----
-GET /turniere?event={veranstaltungsId} HTTP/1.1
-oder
-GET /turniere/{veranstaltungsId} HTTP/1.1
+GET /api/v1/turniere/{veranstaltungsId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -288,18 +292,14 @@ wurde)
 
 [source]
 ----
-GET /startliste/veranstaltung?id={veranstaltungsId} HTTP/1.1
-oder
-GET /startliste/veranstaltung/{veranstaltungsId} HTTP/1.1
+GET /api/v1/startliste/veranstaltung/{veranstaltungsId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
 [source]
 ----
-GET /startliste/wettbewerbsart?art={wettbewerbsart} HTTP/1.1
-oder
-GET /startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
+GET /api/v1/startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -394,25 +394,21 @@ Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Starter-ID
-* URL-Parameter: Personen-ID, zusammen mit Wettbewerbsart
+* URL-Parameter: Personen-ID/WDSF-MIN, zusammen mit Wettbewerbsart
 
-Aufruf entweder per Starter-ID oder per Personen-ID (und
+Aufruf entweder per Starter-ID, per Personen-ID bzw. WDSF-MIN (und
 Wettbewerbsart).
 
 [source]
 ----
-GET /starter?id={starterId} HTTP/1.1
-oder
-GET /starter/{starterId} HTTP/1.1
+GET /api/v1/starter/{starterId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
 [source]
 ----
-GET /starter?wettbewerbsart={wettbewerbsart}&person={personenId} HTTP/1.1
-oder
-GET /starter/{wettbewerbsart}/{personenId} HTTP/1.1
+GET /api/v1/starter/{wettbewerbsart}/{personenId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -429,12 +425,12 @@ wie Starter-Eintrag aus Veranstaltungsstartliste, jedoch ohne Meldungen
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: RL-ID (Mehrfachnennung mit versch. IDs möglich)
-* URL-Parameter: Stichtag (optional, ohne Angabe letzter Stand)
+* URL-Parameter: Stichtag (ttmmjjjj, optional, ohne Angabe letzter
+Stand)
 
 [source]
 ----
-GET /ranglisten?rl={ranglistenId1}&rl={ranglistenId2}
-&stichtag={stichtag} HTTP/1.1
+GET /api/v1/ranglisten/{stichtag}/{ranglistenId1},{ranglistenId2},... HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -474,9 +470,7 @@ DM-Warnung in Std/Lat)
 
 [source]
 ----
-GET /funktionaer?person={personenId} HTTP/1.1
-oder
-GET /funktionaer/{personenId} HTTP/1.1
+GET /api/v1/funktionaer/{personenId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -511,7 +505,7 @@ Intern mit Gültigkeit 7 Tage
 
 [source]
 ----
-GET /funktionaere HTTP/1.1
+GET /api/v1/funktionaere HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
@@ -563,9 +557,7 @@ JSON-Datenstreams.
 
 [source]
 ----
-POST /ergebnis?id={turnierId} HTTP/1.1
-oder
-POST /ergebnis/{turnierId} HTTP/1.1
+POST /api/v1/ergebnis/{turnierId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 X-DTV-Pruefsumme: ff621b
@@ -617,20 +609,16 @@ abgelegt.
 
 *Zeilenweise Starter*:
 
-* Starter-ID
+* Starter-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei WDSF-Paaren
+optional)
 * Startnummer
 * Personen (Array, enthält bei Teamwettbewerben alle Starter, die
 tatsächlich getanzt haben)
-** Personen-ID (DTV-Nummer)
+** Personen-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei
+WDSF-Paaren optional)
 ** Vorname
 ** Nachname
-** WDSF-MIN (optional, sofern vorliegend)
-* Club
-** Club-ID
-** Club-Name
-** LTV
-*** LTV-ID
-*** LTV-Name
+** WDSF-MIN (optional, sofern vorliegend; bei WDSF-Paaren Pflicht)
 * Staat
 * Status (teilgenommen = 1, fehlt entschuldigt = 2, fehlt unentschuldigt
 = 3)
@@ -652,7 +640,7 @@ Abweichung)
 ** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten),
 ** Flag VD (0 = keine, 1 = Verwarnt Schrittbegrenzung, 2 =
 Disqualifiziert Schrittbegrenzung, 3 = gewöhnliche Disqualifikation)
-* Wertung [Array Runde, WR, Tänze+1*]
+* Wertung [Array Runde]
 ** Array Vorrunden (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
