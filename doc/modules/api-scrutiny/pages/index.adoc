@@ -54,6 +54,13 @@ betroffenen Turnierarten
 * Einzelstarteraufruf erweitert
 * Ergebnisupload um Clubdaten bereinigt
 
+*03.03.2015 / Version 1.4.1*
+
+* Feldnamen JSON ergänzt (keine inhaltlichen Änderungen)
+* Abkürzungen für Tänze (gem. TSO) und Wettbewerbsarten korrigiert
+* Schnittstelle Aufstiegstabelle ergänzt (fehlte in dieser Version des
+Dokumentes)
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -119,7 +126,8 @@ Einzelstarter ebenfalls beliebig oft abgefragt werden.
 
 == Anmerkungen zur Kodierung
 
-* Alle Datensätze werden als JSON-Konstrukt übertragen
+* Alle Datensätze werden als JSON-Konstrukt übertragen (Feldnamen in
+eckigen Klammern)
 * Die JSON-Kodierung erfolgt streng nach Vorgaben aus RFC 4627
 ** Strings können alle Unicode-Zeichen enthalten
 *** Anführungszeichen, Backslash und Steuerzeichen (U+0000 bis U+001F)
@@ -179,11 +187,11 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 Jede Veranstaltung eine Zeile, alle Veranstaltungen in den folgenden 2 Monaten bei Vereinsanfrage/alle bei Landesanfrage, zu denen der User Berechtigung hat
 
-* Veranstaltungs-ID
-* Datum Von
-* Datum Bis
-* Ort
-* Titel (optional)
+* Veranstaltungs-ID [id]
+* Datum Von [datumVon]
+* Datum Bis [datumBis]
+* Ort [ort]
+* Titel (optional) [titel]
 
 ==== Aufruf Veranstaltung
 
@@ -202,82 +210,84 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ==== Rückgabe Veranstaltung
 
 * Veranstaltung
-** Veranstaltungs-ID
-** Datum Von
-** Datum Bis
-** Turnierstätte
-*** Name
-*** Anschrift (Straße + Nr)
-*** PLZ
-*** Ort
-** Veranstalter
-*** ID
-*** Name
-*** LTV
-**** ID
-**** Name
-** Ausrichter
-*** ID
-*** Name
-*** LTV
-**** ID
-**** Name
-*** Kontakt Telefon
-*** Kontakt E-Mail
-** Titel (optional)
-** Bemerkungen (Freitext, optional)
-** Array Wertungsrichter (optional)
+** Veranstaltungs-ID [id]
+** Datum Von [datumVon]
+** Datum Bis [datumBis]
+** Turnierstätte [turnierstaette]
+*** Name [name]
+*** Anschrift (Straße + Nr) [anschrift]
+*** PLZ [plz]
+*** Ort [ort]
+** Veranstalter [veranstalter]
+*** ID [id]
+*** Name [name]
+*** LTV (optional) [ltv]
+**** ID [id]
+**** Name [name]
+** Ausrichter [ausrichter]
+*** ID [id]
+*** Name [name]
+*** LTV (optional) [ltv]
+**** ID [id]
+**** Name [name]
+*** Kontakt Telefon [kontaktTelefon]
+*** Kontakt E-Mail [kontaktEmail]
+** Titel (optional) [titel]
+** Bemerkungen (Freitext, optional) [bemerkungen]
+** Array Wertungsrichter (optional) [wertungsrichter]
 *** Inhalte wie bei Einzelaufruf Funktionäre (siehe unten)
-** Array Funktionäre (TL, BS, CHM, optional)
+** Array Funktionäre (TL, BS, CHM, optional) [funktionaere]
 *** Inhalte wie bei Einzelaufruf Funktionäre (siehe unten)
-* Array Flächen
-** Flächen-Bezeichnung (eindeutig innerh. der Veranstaltung)
-** Typ (Text: z.B. Parkett, Kunststoff, Stein)
-** Länge (in Metern; Kommawert z.B. 10,5; Länge ≥ Breite)
-** Breite(in Metern; Kommawert)
-* Array Turniere
-** Turnier-ID
-** Datum Von
-** Datum Bis
+* Array Flächen [flaechen]
+** Flächen-Bezeichnung (eindeutig innerh. der Veranstaltung) [id]
+** Typ (Text: z.B. Parkett, Kunststoff, Stein) [typ]
+** Länge (in Metern; Kommawert z.B. 10,5; Länge ≥ Breite) [laenge]
+** Breite (in Metern; Kommawert) [breite]
+* Array Turniere [turniere]
+** Turnier-ID [id]
+** Datum Von [datumVon]
+** Datum Bis [datumBis]
 ** Startzeit Plan (Zeit, die im Tanzspiegel veröffentlicht wurde)
+[startzeitPlan]
 ** Startzeit Plan Korrigiert (kann, sofern vom Ausrichter verändert auch
 im Terminkalender als veränderte Startzeit kenntlich dargestellt werden)
-** Titel (optional)
-** Veranstalter
-*** ID
-*** Name
-*** LTV
-**** ID
-**** Name
-** Ausrichter
-*** ID
-*** Name
-*** LTV
-**** ID
-**** Name
-** Flächen-ID
-** Wettbewerbsart (z.B. Einzel, Formation, Solo, Duo, BSW)
-** Turnierform
-** Startgruppe
-** Startklasse oder Startliga
-** Turnierart
+[startzeitPlanKorrigiert]
+** Titel (optional) [titel]
+** Veranstalter [veranstalter]
+*** ID [id]
+*** Name [name]
+*** LTV (optional) [ltv]
+**** ID [id]
+**** Name [name]
+** Ausrichter [ausrichter]
+*** ID [id]
+*** Name [name]
+*** LTV (optional) [ltv]
+**** ID [id]
+**** Name [name]
+** Flächen-ID [flaechenID]
+** Wettbewerbsart (z.B. Einzel, Formation, Solo, Duo,…) [wettbewerbsart]
+** Turnierform [turnierform]
+** Startgruppe [startgruppe]
+** Startklasse oder Startliga [startklasseLiga]
+** Turnierart [turnierart]
 ** Zulassung (grenzt die zugelassenen Paare ein, z.B. DTV oder auf einen
-oder mehrere LTV;)
+oder mehrere LTV;) [zulassung]
 *** Array; mögliche Werte: WDSF, EU, DTV + LTVs
-** Wanderpokal: true/false
-** Turnierrang (numerisch)
+** Wanderpokal: true/false [wanderpokal]
+** Turnierrang (numerisch) [turnierrang]
 ** Flag Aufstiegsturnier (Vergabe von Aufstiegspunkten und
-–platzierungen ja/nein)
-** Ranglisten-ID (optional, bei Ranglistenturnieren und ggf. bei
-DM)
-** WDSF-Turnier-ID (optional)
-** Startgebühr in EUR (optional, Zahlwert oder Freitext)
-** Bemerkungen (Freitext optional)
-** Array Wertungsrichter (optional)
+–platzierungen ja/nein) [aufstiegsturnier]
+** Ranglisten-ID (optional, bei Ranglistenturnieren und ggf. bei DM)
+[ranglistenId]
+** WDSF-Turnier-ID (optional) [wdsfTurnierId]
+** Startgebühr in EUR (optional, Zahlwert oder Freitext) [startgebuehr]
+** Bemerkungen (Freitext optional) [bemerkungen]
+** Array Wertungsrichter (optional) [wertungsrichter]
 *** Personen-ID
-** Turnierleiter Personen-ID (optional)
-** Beisitzer Personen-ID (optional)
-** Chairman Personen-ID (optional)
+** Turnierleiter Personen-ID (optional) [turnierleiter]
+** Beisitzer Personen-ID (optional) [beisitzer]
+** Chairman Personen-ID (optional) [chairman]
 
 === Startlisten (lesend)
 
@@ -318,7 +328,8 @@ Datenschutzgründen keine Namen der Personen (Feldwerte NULL).
 
 * Gültigkeits-Flag für Meldestand (0 = Turniermeldungen noch nicht
 gestartet, 1 = Meldestand noch nicht final, 2 = Meldestand final)
-* Nachmeldungen möglich-Flag
+[status]
+* Nachmeldungen möglich-Flag [nachmeldungen]
 
 Erläuterung: +
 Turnierprogramme können die Startdaten ab dem Start der Turniermeldungen
@@ -327,66 +338,74 @@ inkl. der aktuellen Aufstiegsdaten kann frühestens am Tag vor dem
 Turnier geladen werden – er wird in diesem Flag als solcher
 gekennzeichnet.
 
-*Starterweise*:
+*Starterweise [starter]*:
 
-* Starter-ID (übergreifende ID für tänzerische Einheit)
+* Starter-ID (übergreifende ID für tänzerische Einheit) [id]
 * Team (optional, nur bei Formations-, Small-Group- und
-Mannschaftswettbewerben)
-** Team-Name (sofern vorhanden, z.B. bei Gruppen+Formationen)
+Mannschaftswettbewerben) [team]
+** Team-Name (sofern vorhanden, z.B. bei Gruppen+Formationen) [name]
 ** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen+Formationen)
+[kapitaen]
 ** Team-Trainer (sofern vorhanden, z.B. bei Gruppen+Formationen)
+[trainer]
 * Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
-Ersatztänzer):
-** Personen-ID (DTV-Nummer)
-** Titel (nur bei Einzelaufruf Veranstaltung, sonst NULL)
-** Vorname (nur bei Einzelaufruf Veranstaltung, sonst NULL)
-** Nachname (nur bei Einzelaufruf Veranstaltung, sonst NULL)
+Ersatztänzer) [personen]:
+** Personen-ID (DTV-Nummer) [id]
+** Titel (nur bei Einzelaufruf Veranstaltung, sonst NULL) [titel]
+** Vorname (nur bei Einzelaufruf Veranstaltung, sonst NULL) [vorname]
+** Nachname (nur bei Einzelaufruf Veranstaltung, sonst NULL) [nachname]
 ** Geschlecht (nur bei Einzelaufruf Veranstaltung, sonst NULL)
-** WDSF-MIN (optional, sofern vorhanden)
-** Nationalität (3-Buchst.-Code)
-* Club (bei deutschen Paaren Pflicht, sonst optional)
-** Club-ID
-** Club-Name
-** LTV (bei deutschen Paaren Pflicht, sonst optional)
-*** LTV-ID
-*** LTV-Name
-* Staat (Staat, für den der Starter an den Start geht)
+[geschlecht]
+** WDSF-MIN (optional, sofern vorhanden) [wdsfMin]
+** Nationalität (3-Buchst.-Code) [nationalitaet]
+* Club (bei deutschen Paaren Pflicht, sonst optional) [club]
+** Club-ID [id]
+** Club-Name [name]
+** LTV (bei deutschen Paaren Pflicht, sonst optional) [ltv]
+*** LTV-ID [id]
+*** LTV-Name [name]
+* Staat (Staat, für den der Starter an den Start geht) [staat]
 * Meldungen (Array, nicht vorhanden bei Aufruf der Gesamt-Starterliste
-für eine Wettbewerbsart)
+für eine Wettbewerbsart) [meldungen]
 ** Turnier-ID (nur die IDs der Turniere der aufgerufenen Veranstaltung)
-** Flag Meldung (Meldung = true, Abmeldung = false)
-** Datum der Meldebestätigung (durch Verein)
+[turnierId]
+** Flag Meldung (Meldung = true, Abmeldung = false) [meldung]
+** Datum der Meldebestätigung (durch Verein) [bestaetigt]
 ** Startnummer (optional – wird erst später für Ligaturniere relevant
-sein wie JMD und Formation)
-** Flag Startsperre (true/false)
+sein wie JMD und Formation) [startNr]
+** Flag Startsperre (true/false) [startsperre]
 * Array Startbuch turnierartweise (optional, nur Einzelwettbewerbe
 St/Lat und JMD, nur Turnierarten für die ein elektronisches Startbuch
-vorliegt, in der Übergangszeit ggf. komplett leer)
-** Turnierart
-** Startgruppe
+vorliegt, in der Übergangszeit ggf. komplett leer) [startbuch]
+** Turnierart [turnierart]
+** Startgruppe [startgruppe]
 ** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
+[startliga]
 ** Ist-Startklasse (z.B. BSW, D, C,B,A,S,PD) (optional, nur bei
-Einzelwettbewerben St/Lat und JMD)
+Einzelwettbewerben St/Lat und JMD) [startklasse]
 ** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare/alle
 Doppelstartpaare, die nicht weiter aufsteigen können, d.h. „kein
 Aufstieg möglich bei diesem Turnier für dieses Paar“; optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
+[naechsteStartklasse]
 ** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
-Einzelwettbewerbe JMD)
-*** Ist
-*** Ziel
+Einzelwettbewerbe JMD) [punkte]
+*** Ist [ist]
+*** Ziel [ziel]
 ** Platzierungen (optional, nur bei Einzelwettbewerben St/Lat, ggf.
-später Einzelwettbewerbe JMD)
-*** Ist
-*** Ziel
+später Einzelwettbewerbe JMD) [platzierungen]
+*** Ist [ist]
+*** Ziel [ziel]
 ** Regeln (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
-Einzelwettbewerbe JMD)
-*** Mindestpunkte
-*** Platzierung bis Platz (einschließlich)
-** Flags
+Einzelwettbewerbe JMD) [regeln]
+*** Mindestpunkte [minPunkte]
+*** Platzierung bis Platz (einschließlich) [platzierungBis]
+** Flags [flags]
 *** Laufzetteldruck da Aufstiegschance am Wochenende (optional, nur bei
 Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
+[laufzettel]
 *** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
+[verwarnungSchrittbegrenzung]
 
 ==== Aufruf Einzelstarter
 
@@ -437,27 +456,29 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 ==== Rückgabe
 
-* Global-je-RL: RL-ID, Stand (Datum der letzten Änderung)
-* Array Starter:
-** Starter-ID
-** Rang
-*** Rangliste
-*** Platzierung der vorhergehenden DM
-** Array über alle Personen: [nicht bei Gruppen/Formationen, bei Paaren:
-Herr-ID, Dame-ID,…]
-*** Personen-ID
-*** Titel
-*** Vorname
-*** Nachname
-** Club
-*** ID
-*** Name
-*** LTV
-**** ID
-**** Name
-** RL-Punkte
+* Global-je-RL
+** RL-ID [id]
+** Stand (Datum der letzten Änderung) [id]
+* Array Starter [starter]:
+** Starter-ID [id]
+** Rang [rang]
+*** Rangliste [rl]
+*** Platzierung der vorhergehenden DM [dm]
+** Array über alle Personen: (nicht bei Gruppen/Formationen, bei Paaren:
+Herr-ID, Dame-ID,…) [personen]
+*** Personen-ID [id]
+*** Titel [titel]
+*** Vorname [vorname]
+*** Nachname [nachname]
+** Club [club]
+*** ID [id]
+*** Name [name]
+*** LTV [ltv]
+**** ID [id]
+**** Name [name]
+** RL-Punkte [punkte]
 ** Anz. teilgenommene Turniere in der Saison (evtl. verwendbar für die
-DM-Warnung in Std/Lat)
+DM-Warnung in Std/Lat) [anzahlTurniere]
 
 === Funktionäre/Lizenzträger (lesend) Einzelaufruf
 
@@ -477,20 +498,20 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 ==== Rückgabe
 
-* Personen-ID
-* WDSF-MIN (optional, sofern verfügbar)
-* alte Lizenznummer (optional)
-* Titel
-* Vorname
-* Nachname
-* Club
-** ID
-** Name
-** LTV
-*** ID
-*** Name
-* Staat
-* Array Lizenz
+* Personen-ID [id]
+* WDSF-MIN (optional, sofern verfügbar) [wdsfMin]
+* alte Lizenznummer (optional) [lizenzNr]
+* Titel [titel]
+* Vorname [vorname]
+* Nachname [nachame]
+* Club [club]
+** ID [id]
+** Name [name]
+** LTV [ltv]
+*** ID [id]
+*** Name [name]
+* Staat [staat]
+* Array Lizenzen [lizenzen]
 ** Lizenz-IDs (Auflistung aller gültigen Funktionärs-Lizenzen)
 
 === Funktionäre/Lizenzträger – Gesamtdatei des DTV (lesend)
@@ -513,6 +534,47 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ==== Rückgabe
 
 * Array (Elemente wie Einzelaufruf, Namen und Titel NULL)
+
+=== Aufstiegstabellen (lesend)
+
+Z.Zt. nur für Wettbewerbsart Einzel
+
+Existiert kein Eintrag in der Tabelle (Array Kriterien), ist kein
+weiterer Aufstieg möglich. +
+Die Tabelle enthält auch Felder für die Ist-Klasse BSW, für die
+technisch der Aufstieg ermittelt werden muss, der jedoch erst nach
+Umwandlung in ein vollwertiges Startbuch vollzogen werden kann.
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+
+[source]
+----
+GET /api/v1/aufstiegstabelle/{wettbewerbsart}/{jahr} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+* Array
+** Landesverbände (Array, Landesverbände, für die die Tabelle gültig
+ist, z.Zt. alle) [ltv]
+** Mindest-Punkte (Mindest-Punkte, die zum Erreichen einer Platzierung
+erforderlich sind) [minPunkte]
+** Tabellen (Array) [tabellen]
+*** Startgruppen (Array) [startgruppen]
+*** Turnierart [turnierart]
+*** Kriterien (Array, aufsteigend sortiert nach Klasse) [kriterien]
+**** Klasse (Ist-Klasse des Paares) [klasse]
+**** Punkte (erforderliche Punkte für Aufstieg) [punkte]
+**** Plätze (erforderliche Plätze für Aufstieg) [plaetze]
+**** Platzierung Bis Platz [bisPlatz]
+**** Doppelstart: true/false, kennzeichnet Aufstiege in Startklassen,
+die nur im Doppelstart genutzt werden können [doppelstart]
 
 === Ergebnisse (schreibend, evtl. lesend)
 
@@ -567,123 +629,128 @@ X-DTV-Pruefsumme: ff621b
 
 *Übergreifend Bericht*:
 
-* Tänze (Array, max. 10 Tänze)
-** gültige Werte: LW, TG, WW, SF, QS, SB, CC, RU, PD, JV, STD, LAT, JMD,
+* Tänze (Array, max. 10 Tänze) [taenze]
+** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
 DF, SA,..)
-* WR (Array, WR des Turniers)
+* WR (Array, WR des Turniers) [wr]
 ** Personen-ID (für DTV-WR Pflicht, für Ersatz-WR optional, für
-Ausländer NULL)
-** Vorname
-** Nachname
-** Club
-*** Club-Name (optional für Ausländer)
-*** LTV-Name (für Ausländer NULL)
-** Staat
-* Turnierleiter (Array, min. 1 Element)
+Ausländer NULL) [id]
+** Vorname [vorname]
+** Nachname [nachname]
+** Club [club]
+*** Club-Name (optional für Ausländer) [name]
+*** LTV-Name (für Ausländer NULL) [ltv]
+** Staat [staat]
+* Turnierleiter (Array, min. 1 Element) [tl]
 ** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
 konfiguriert)
-* Beisitzer (Array, min. 1 Element)
+* Beisitzer (Array, min. 1 Element) [bs]
 ** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
 konfiguriert)
-* Chairman (optional) (Array)
+* Chairman (optional) (Array) [ch]
 ** Analog WR-Einzelement
-* Vorkommnisse (optional)
-* Beginnzeit (ISO8601)
-* Endzeit (ISO8601)
-* Array Rundenablauf (NULL für Upload von nur-Startlisten)
+* Vorkommnisse (optional) [vorkommnisse]
+* Beginnzeit (ISO8601) [beginn]
+* Endzeit (ISO8601) [ende]
+* Array Rundenablauf (NULL für Upload von nur-Startlisten) [ablauf]
 ** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
-B-Finale=FB)
+B-Finale=FB) [runde]
 ** Wertungstyp +
 (Kreuze{0..1}=K, Mannschaftspunkte{1..1,5..2..2,5..3}=M,
 Finalplätze{1..x}=P, FormationswertungKreuze=FK,
 FormationswertungPlätze=FP, JMD-WertungenKreuze=JK,
-JMD-WertungenPlätze=JP, JudgingSystem2.x=JS)
-* kombiniert mit Turnier-ID (optional)
-* Zuschauerzahl
+JMD-WertungenPlätze=JP, JudgingSystem2.x=JS) [typ]
+* kombiniert mit Turnier-ID (optional) [kombiniertMit]
+* Zuschauerzahl [zuschauer]
 
 FK, FP, JK und JP Wertungen sind im normalen Ergebnisarray nur wie
 Kreuzsummen und Finalwertungen enthalten. Im Digitalen-Wertungs-Array
 sind auch die Punktewertungen als Punkte in den verschiedenen „Tänzen“
 abgelegt.
 
-*Zeilenweise Starter*:
+*Zeilenweise Starter [starter]*:
 
 * Starter-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei WDSF-Paaren
-optional)
-* Startnummer
+optional) [id]
+* Startnummer [startNr]
 * Personen (Array, enthält bei Teamwettbewerben alle Starter, die
 tatsächlich getanzt haben)
 ** Personen-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei
-WDSF-Paaren optional)
-** Vorname
-** Nachname
-** WDSF-MIN (optional, sofern vorliegend; bei WDSF-Paaren Pflicht)
-* Staat
+WDSF-Paaren optional) [id]
+** Vorname [vorname]
+** Nachname [nachname]
+** WDSF-MIN (optional, sofern vorliegend; bei WDSF-Paaren Pflicht) [wdsfMin]
+* Staat [staat]
 * Status (teilgenommen = 1, fehlt entschuldigt = 2, fehlt unentschuldigt
-= 3)
-* Meldestatus (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
-Nachmeldung, Aufsteiger = 4)
+= 3) [status]
+* Meldungstyp (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
+Nachmeldung, Aufsteiger = 4) [meldungsTyp]
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
-nur-Startliste)
-** Platz-Gesamtergebnis Von
-** Platz-Gesamtergebnis Bis
+nur-Startliste) [ergebnis]
+** Platz-Gesamtergebnis Von [platzGesamtVon]
+** Platz-Gesamtergebnis Bis [platzGesamtBis]
 ** Platz-Eigenes-Turnier Von (z.B. nach Anhang 5, NULL wenn nicht
-benötigt)
+benötigt) [platzTurnierVon]
 ** Platz-Eigenes-Turnier Bis (z.B. nach Anhang 5, NULL wenn nicht
-benötigt)
-** Punkte
+benötigt) [platzTurnierBis]
+** Punkte [punkte]
 ** Platzierungen gesamt (zur Überprüfung in der DB, Adminalarm bei
-Abweichung)
+Abweichung) [platzierungenGesamt]
 ** Punkte gesamt (zur Überprüfung in der DB, Adminalarm bei Abweichung)
-** Aufstieg (0 = nein, 1 = ja, 2 = ja, durch Beschluss)
-** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten),
-** Flag VD (0 = keine, 1 = Verwarnt Schrittbegrenzung, 2 =
-Disqualifiziert Schrittbegrenzung, 3 = gewöhnliche Disqualifikation)
-* Wertung [Array Runde]
-** Array Vorrunden (nur Kreuz+Mannschaftspunkt-Wertungen)
+[punkteGesamt]
+** Aufstieg (0 = nein, 1 = ja, 2 = ja, durch Beschluss) [aufstieg]
+** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten)
+[laufzettel]
+** Flag Verwarnung/Disqualifikation (0 = keine, 1 = Verwarnt
+Schrittbegrenzung, 2 = Disqualifiziert Schrittbegrenzung, 3 =
+gewöhnliche Disqualifikation) [vd]
+* Wertung (Array mit N = Anzahl Runden Elementen; nicht getanzte Runden
+werden als NULL übertragen, Runden nach Ausscheiden werden gar nicht
+übertragen) [wertung]
+** Vorrundenwertung (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
 ***** Tänze 1-x: Float für Wertung (Einzelkreuze, sonst NULL)
 ***** Tänze+1: Float Summe +
-nicht getanzte Runden werden als NULL übertragen, Runden nach
-Ausscheiden werden gar nicht übertragen
-* Summe Wertungen über alle Tänze und alle WR
-* Summe Float JudgingSystem2.x [nur bei JS]
-* Array Endrunden (nur Final-Platz-Wertungen, bei Mannschaft nur
-Vorrundenarray)
-** Array Tänze
-*** Array WR+2
-**** WR1-x: Non-signed Byte für Wertung +
-(nicht getanzte Runden werden als NULL übertragen, Runden nach
-Ausscheiden werden gar nicht übertragen
-**** WR+1: Platzziffer
-**** WR+2: Platzziffer Summe
+*** Summe Wertungen über alle Tänze und alle WR
+** JudgingSystem2.x: Summe Float
+** Endrundenwertung (nur Final-Platz-Wertungen, bei Mannschaft wird
+Struktur der Vorrundenwertung verwendet)
+*** Array Tänze
+**** Array WR+2
+***** WR1-x: Non-signed Byte für Wertung
+***** WR+1: Platzziffer
+***** WR+2: Platzziffer Summe
 
 *Einmal*:
 
-* Array Endrundentabelle (optional, nur bei Plätzewertungen P, FP, JP.
+* Array Endrundentabelle (optional, nur bei Plätzewertungen P, FP, JP,
 Reihenfolge aus Rundenablauf, nur bei B/A-Finals relevant, vor
-Turnierende NULL)
+Turnierende NULL) [endrundentabellen]
 ** Array Tänze
-*** Array über Endrundenstarter (Zeilen im heute gedruckten Dok)
-**** Array über Plätze (Spalten im heute gedruckten Dok)
-***** Anzahl (Wert, solange in Ausrechnung benötigt. NULL, wenn
+*** Array über Endrundenstarter (Zeilen im heute gedruckten Dokument)
+**** Array über Plätze (Spalten im heute gedruckten Dokument)
+***** „Tabellenzelle“ (solange in Ausrechnung benötigt; NULL wenn
 Ausrechnung in früherer Spalte beendet)
-***** Summe (optional, ggf. NULL)
-* Array Skatingtabelle (optional sofern nötig. Reihenfolge aus
+****** Anzahl [anzahl]
+****** Summe (optional, sonst NULL) [summe]
+* Array Skatingtabelle (optional bzw. nur sofern nötig, Reihenfolge aus
 Rundenablauf, nur bei B/A-Finals relevant, vor Turnierende NULL)
-** Skating Regel 10
+[skatingtabellen]
+** Skating Regel 10 [regel10]
 *** Array über Endrundenstarter
 **** Array über Plätze
-***** Anzahl (Wert, solange in Ausrechnung benötigt. NULL, sonst)
-***** Summe (optional, ggf. NULL)
+***** „Tabellenzelle“ (wenn in Ausrechnung benötigt, sonst NULL)
+****** Anzahl [anzahl]
+****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 10 bestimmt, sonst NULL)
-** Skating Regel 11 (optional)
-*** Array über Paare
+** Skating Regel 11 (optional) [regel11]
+*** Array über Endrundenstarter
 **** Array über Plätze
-***** Anzahl (Wert, solange in Ausrechnung benötigt. NULL, sonst)
-***** Summe (optional, ggf. NULL)
+***** „Tabellenzelle“ (wenn in Ausrechnung benötigt, sonst NULL)
+****** Anzahl [anzahl]
+****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 11 bestimmt, sonst NULL)
 
 Bei Startern eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
@@ -724,15 +791,16 @@ Bei Formations/JMD-Wertungen läuft das Wertungsarray immer über 5/4
 virtuelle Tänze +
 (Tanz 1-4/3: Wertungsgebiete Punkte 0-10, Tanz 5/4: Kreuz oder Platz).
 
-* Array über alle WR
-** Kreuzvorgabe von (bei Finale NULL)
-** Kreuzvorgabe bis (bei Finale NULL)
-** Array über Starter
-*** Startnummern
+* Array über alle WR (in der Reihenfolge wie im Ergebnisupload)
+** Kreuzvorgabe von (bei Finale NULL) [kreuzvorgabeVon]
+** Kreuzvorgabe bis (bei Finale NULL) [kreuzvorgabeBis]
+** Array über Starter [starter]
+*** Startnummer [startNr]
 *** Array über Tänze (bzw. Wertungsgebiete bei Formation oder JMD)
+[wertungen]
 **** Float Wertung
-*** Float Summe Wertung (NULL bei Platzwertung)
-** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 pixels)
+*** Float Summe Wertung (NULL bei Platzwertung) [summe]
+** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 Pixel)
 
 == Schlüsselverzeichnis
 
@@ -743,8 +811,8 @@ TMV, TNW, TRP, TSH, TTSV, LTVSA
 
 === Wettbewerbsarten
 
-Einzel, Formation Std/Lat, Mannschaft, Solo, Solo männlich, Solo
-weiblich, Duo, Small Group, Formation JMD
+Einzel, FormationStdLat, Mannschaft, Solo, SoloMaennlich, SoloWeiblich,
+Duo, SmallGroup, FormationJMD
 
 === Turnierformen
 
@@ -802,7 +870,7 @@ WR-J1, WR-J2, WR-J1-DM, WR-J2-DM
 
 === Tänze
 
-LW, TG, WW, SF, QS, SB, CC, RU, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
+LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
 
 === Runden
 
