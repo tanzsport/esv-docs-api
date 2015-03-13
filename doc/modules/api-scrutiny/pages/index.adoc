@@ -61,6 +61,16 @@ betroffenen Turnierarten
 * Schnittstelle Aufstiegstabelle ergänzt (fehlte in dieser Version des
 Dokumentes)
 
+*12.03.2015 / Version 1.5*
+
+* Startlistendownload: Flag Nachmeldeerlaubnis nun Array; Klarstellung
+zu globalen Parametern in der Gesamtstarterliste je Wettbewerbsart
+* Ranglistenschnittstelle: Beispielaufruf ohne Stichtag ergänzt
+* Aufstiegstabelle: Feld Zielklasse ergänzt
+* Neue Schnittstelle: Ausgefallenes (einzelnes) Turnier
+* Leerzeichen und Punkte aus Konstanten im Schlüsselverzeichnis entfernt
+(LTVs, Startgruppen, Startklassen, RL-IDs)
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -322,14 +332,15 @@ Wettbewerbsart für die Offline-Verwendung heruntergeladen werden kann.
 Die Gesamt-Startliste einer Wettbewerbsart enthält aus
 Datenschutzgründen keine Namen der Personen (Feldwerte NULL).
 
-==== Rückgabewerte Veranstaltung
+==== Rückgabe Veranstaltung (Gesamt-Starterliste analog ohne Namen)
 
 *Global*:
 
 * Gültigkeits-Flag für Meldestand (0 = Turniermeldungen noch nicht
 gestartet, 1 = Meldestand noch nicht final, 2 = Meldestand final)
-[status]
-* Nachmeldungen möglich-Flag [nachmeldungen]
+[status]; NULL in Gesamt-Starterliste
+* Array Nachmeldungen möglich: Liste der Turnier-IDs mit
+Nachmeldeerlaubnis [nachmeldungen]; NULL in Gesamt-Starterliste
 
 Erläuterung: +
 Turnierprogramme können die Startdaten ab dem Start der Turniermeldungen
@@ -447,6 +458,15 @@ wie Starter-Eintrag aus Veranstaltungsstartliste, jedoch ohne Meldungen
 * URL-Parameter: Stichtag (ttmmjjjj, optional, ohne Angabe letzter
 Stand)
 
+*Ohne Stichtag*:
+[source]
+----
+GET /api/v1/ranglisten/{ranglistenId1},{ranglistenId2},... HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+*Mit Stichtag*:
 [source]
 ----
 GET /api/v1/ranglisten/{stichtag}/{ranglistenId1},{ranglistenId2},... HTTP/1.1
@@ -570,6 +590,8 @@ erforderlich sind) [minPunkte]
 *** Turnierart [turnierart]
 *** Kriterien (Array, aufsteigend sortiert nach Klasse) [kriterien]
 **** Klasse (Ist-Klasse des Paares) [klasse]
+**** Ziel-Klasse des Aufstiegs [zielklasse]. Bei Ist-Klasse, die keinen
+Aufstieg ermöglichen wird NULL zurückgeliefert (z.B. BSW)
 **** Punkte (erforderliche Punkte für Aufstieg) [punkte]
 **** Plätze (erforderliche Plätze für Aufstieg) [plaetze]
 **** Platzierung Bis Platz [bisPlatz]
@@ -762,6 +784,30 @@ Staat.
 Daten erfolgreich angenommen, bzw. Informationen über mögliche Fehler
 (z.B. geschlossen, etc)
 
+=== Ausgefallenes Turnier (schreibend)
+
+Dieser Aufruf ist immer ein Turnierabschluss und startet die
+vier-Stunden-Frist zum Schließen des Turniers. Innerhalb der Frist muss
+auch ein Upload von „echten“ Ergebnissen ersatzweise möglich sein.
+
+==== Aufruf Turnier
+
+* HTTP-Verb: POST
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Turnier-ID
+
+[source]
+----
+POST /api/v1/ausgefallen/{turnierId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Inhalte
+
+* Vorkommnisse (optional) [vorkommnisse]
+
 === Wertungsrichterzettel (PDF)
 
 ==== Aufruf
@@ -806,8 +852,8 @@ virtuelle Tänze +
 
 === LTVs
 
-HATV, HTV, LTV Berlin, LTV Br, LTV Bremen, LTVB, LTVS, NTV, SLT, TBW,
-TMV, TNW, TRP, TSH, TTSV, LTVSA
+HATV, HTV, LTVBerlin, LTVBr, LTVBremen, LTVB, LTVS, NTV, SLT, TBW, TMV,
+TNW, TRP, TSH, TTSV, LTVSA
 
 === Wettbewerbsarten
 
@@ -827,14 +873,14 @@ RM (Regionalmeisterschaft JMD)
 
 === Startgruppen
 
-Kin.I, Kin.II, Kin., Jun.I, Jun.II, Jug., Hgr., Hgr.II, Sen.I, Sen.II,
-Sen.III, Sen.IV, U21, MC.I, MC.II
+KinI, KinII, Kin, JunI, JunII, Jug, Hgr, HgrII, SenI, SenII, SenIII,
+SenIV, U21, MCI, MCII
 
-Ggf. Kombinationen aus diesen Abkürzungen (z.B. Jug./Hgr., Sen.I/II)
+Ggf. Kombinationen aus diesen Abkürzungen (z.B. Jug/Hgr, SenI/II)
 
 === Startklassen
 
-BSW, D, C, B, A, S, PD, 1.BL, 2.BL, RL, OL, LL, VL
+BSW, D, C, B, A, S, PD, 1BL, 2BL, RL, OL, LL, VL
 
 === Turnierarten
 
@@ -842,8 +888,8 @@ Std, Lat, Kmb, JMD, SD-Std, SD-Lat
 
 === Ranglisten-IDs
 
-Jun.II-Std, Jun.II-Lat, Jug-Std, Jug-Lat, Hgr-Std, Hgr-Lat, Hgr-RS-Std,
-Hgr-RS-Lat, Sen.I-Std, Sen.II-Std, G55-Std, LS66-Std, Jug-SoloM-JMD,
+JunII-Std, JunII-Lat, Jug-Std, Jug-Lat, Hgr-Std, Hgr-Lat, Hgr-RS-Std,
+Hgr-RS-Lat, SenI-Std, SenII-Std, G55-Std, LS66-Std, Jug-SoloM-JMD,
 Jug-SoloW-JMD, Jug-Duo-JMD, Jug-SG-JMD, Hgr-SoloM-JMD, Hgr-SoloW-JMD,
 Hgr-Duo-JMD, Hgr-SG-JMD
 

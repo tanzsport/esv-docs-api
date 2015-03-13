@@ -6,7 +6,32 @@
 
 * Dokumente gesplittet und Interfacereihenfolge überarbeitet
 
+*12.03.2015 / Version 1.5*
+
+* Schnittstelle zur Prüfung der Starterlaubnis ergänzt
+* (Angleichung des Versionsstandes)
+
 == Meldesysteme
+
+=== Starterlaubnis abfragen
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Turnier-ID
+* URL-Parameter: Starter-ID
+
+[source]
+----
+GET /api/v1/starterlaubnis/{turnierId}/{starterId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+Erlaubnisstatus true oder false (JSON) mit HTTP-Ergebniscode
 
 === Meldeeingang schreiben
 
@@ -17,11 +42,21 @@
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Turnier-ID
 * URL-Parameter: Starter-ID
-* URL-Parameter: Meldung/Abmeldung
+* URL-Parameter: Meldung/Abmeldung als true/false
 
-Antwort mit http-Ergebniscode
+[source]
+----
+POST /api/v1/meldung/{turnierId}/{starterId}/{meldungAbmeldung} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+nur HTTP-Ergebniscode
 
 === Bestätigungsstatus lesend
+
 
 ==== Aufruf
 
@@ -31,8 +66,15 @@ Antwort mit http-Ergebniscode
 * URL-Parameter: Turnier-ID
 * URL-Parameter: Starter-ID
 
-Antwort mit http-Ergebniscode (zzgl. Codes für noch offen, bestätigt,
-abgelehnt)
+[source]
+----
+GET /api/v1/bestaetigung/{turnierId}/{starterId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+Mit HTTP-Ergebniscode für offen, bestätigt oder abgelehnt: Bestätigungsstatus true (bestätigt), false (abgelehnt) oder NULL (offen) (JSON)
 
 == Vereinswebseiten
 
