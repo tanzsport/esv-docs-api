@@ -71,6 +71,10 @@ zu globalen Parametern in der Gesamtstarterliste je Wettbewerbsart
 * Leerzeichen und Punkte aus Konstanten im Schlüsselverzeichnis entfernt
 (LTVs, Startgruppen, Startklassen, RL-IDs)
 
+*25.03.2015 / Version 1.6*
+
+* Ergebnis-Interface ergänzt um Sterne-Info bei Startern
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -708,6 +712,7 @@ WDSF-Paaren optional) [id]
 = 3) [status]
 * Meldungstyp (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
 Nachmeldung, Aufsteiger = 4) [meldungsTyp]
+* Anzahl Sterne (gesetzte Paare) [sterne]
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
 nur-Startliste) [ergebnis]
 ** Platz-Gesamtergebnis Von [platzGesamtVon]
