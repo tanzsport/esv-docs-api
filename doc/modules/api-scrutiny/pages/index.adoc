@@ -75,6 +75,22 @@ zu globalen Parametern in der Gesamtstarterliste je Wettbewerbsart
 
 * Ergebnis-Interface ergänzt um Sterne-Info bei Startern
 
+*07.05.2015 / Version 1.6.1*
+
+* Zusatzinfo Ergebnisupload Verwarnungs/Disqualifikations-Flag
+* Schlüsselverzeichnis WR-Lizenzen: WR-B getrennt in WR-B-Std und
+WR-B-Lat
+* Angabe, welche Felder in der Gesamtstartliste einer Wettbewerbsart
+NULL sind
+* Ergebnisupload und digitale WR-Zettel: Vorgabe zur Verfahrensweise,
+wenn Tänze in einer Runde nicht getanzt wurden
+* Digitaler WR-Zettel: Datentyp für Einzelkreuz ist gemischt (Float für
+Wertung oder „L“ für Lift); Vorgabe zur Verfahrensweise, wenn die
+Wertungsdaten nicht vollständig digital vorliegen; Feldname für
+Unterschrift ergänzt
+* Skatingtabelle: Klarstellung zur Übermittlung, falls das Skatingsystem
+nicht angewandt wurde
+
 == Anmerkungen zum Datenmodell
 
 * Veranstalter und Veranstalter-ID +
@@ -334,7 +350,8 @@ Wird keine Veranstaltungs-ID angegeben, muss die Wettbewerbsart
 angegeben werden, damit die Gesamt-Starterliste für die jeweilige
 Wettbewerbsart für die Offline-Verwendung heruntergeladen werden kann.
 Die Gesamt-Startliste einer Wettbewerbsart enthält aus
-Datenschutzgründen keine Namen der Personen (Feldwerte NULL).
+Datenschutzgründen keine Namen der Personen (Feldwerte [titel],
+[vorname], [nachname], [geschlecht] sind NULL).
 
 ==== Rückgabe Veranstaltung (Gesamt-Starterliste analog ohne Namen)
 
@@ -731,14 +748,21 @@ Abweichung) [platzierungenGesamt]
 [laufzettel]
 ** Flag Verwarnung/Disqualifikation (0 = keine, 1 = Verwarnt
 Schrittbegrenzung, 2 = Disqualifiziert Schrittbegrenzung, 3 =
-gewöhnliche Disqualifikation) [vd]
+gewöhnliche Disqualifikation) [vd] +
+Das Verwarnungsflag darf nur >0 gesetzt werden, wenn die Verwarnung oder
+Disqualifikation innerhalb dieses Turnieres erfolgt ist. Dabei ist zu
+beachten, dass es für Paare möglich ist, innerhalb eines Turnieres in
+einer Runde erst verwarnt und in einer späteren Runde disqualifiziert zu
+werden (in diesem Fall wird vd=2 übertragen).
 * Wertung (Array mit N = Anzahl Runden Elementen; nicht getanzte Runden
 werden als NULL übertragen, Runden nach Ausscheiden werden gar nicht
-übertragen) [wertung]
+übertragen; werden Tänze in der jeweiligen Runde nicht getanzt, ist das
+jeweilige Wertungselement mit NULL anzugeben) [wertung]
 ** Vorrundenwertung (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
-***** Tänze 1-x: Float für Wertung (Einzelkreuze, sonst NULL)
+***** Tänze 1-x: Float für Wertung (Einzelkreuze, sonst NULL, nicht
+getanzte Tänze der Runde ebenfalls NULL)
 ***** Tänze+1: Float Summe +
 *** Summe Wertungen über alle Tänze und alle WR
 ** JudgingSystem2.x: Summe Float
@@ -762,9 +786,9 @@ Turnierende NULL) [endrundentabellen]
 Ausrechnung in früherer Spalte beendet)
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
-* Array Skatingtabelle (optional bzw. nur sofern nötig, Reihenfolge aus
-Rundenablauf, nur bei B/A-Finals relevant, vor Turnierende NULL)
-[skatingtabellen]
+* Array Skatingtabelle (Reihenfolge aus Rundenablauf, nur bei B/A-Finals
+relevant, vor Turnierende leeres Array; sofern kein Skating in der Runde
+angewandt ist das jeweilige Element NULL) [skatingtabellen]
 ** Skating Regel 10 [regel10]
 *** Array über Endrundenstarter
 **** Array über Plätze
@@ -822,6 +846,13 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Turnier-ID
 
+[source]
+----
+POST /api/v1/wrzettelpdf/{turnierId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
 ==== Inhalte
 
 * PDF-Files
@@ -836,22 +867,33 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 * URL-Parameter: Turnier-ID
 * URL-Parameter: Runde
 
+[source]
+----
+POST /api/v1/wrzetteldigi/{turnierId}/{runde} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
 ==== Inhalte
 
 Bei Formations/JMD-Wertungen läuft das Wertungsarray immer über 5/4
 virtuelle Tänze +
 (Tanz 1-4/3: Wertungsgebiete Punkte 0-10, Tanz 5/4: Kreuz oder Platz).
 
-* Array über alle WR (in der Reihenfolge wie im Ergebnisupload)
+* Array über alle WR (in der Reihenfolge wie im Ergebnisupload; das
+Element ist NULL, wenn die Wertungen nicht vollständig digital erfasst
+wurden, z.B. wenn teilweise oder vollständig auf Papier gewertet wurde)
 ** Kreuzvorgabe von (bei Finale NULL) [kreuzvorgabeVon]
 ** Kreuzvorgabe bis (bei Finale NULL) [kreuzvorgabeBis]
 ** Array über Starter [starter]
 *** Startnummer [startNr]
 *** Array über Tänze (bzw. Wertungsgebiete bei Formation oder JMD)
 [wertungen]
-**** Float Wertung
+**** Wertung (Float oder „L“ für Lift, NULL, falls dieser Tanz in der
+Runde nicht getanzt wurde)
 *** Float Summe Wertung (NULL bei Platzwertung) [summe]
 ** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 Pixel)
+[unterschrift]
 
 == Schlüsselverzeichnis
 
@@ -906,11 +948,11 @@ Mehrfachnennung im Interface sehr wahrscheinlich
 TL, TL-JMD
 
 *WR-Einzel*: +
-WR-D (alle aktiven C-Tänzer mit WR-C), WR-C, WR-B (alle aktiven
-A-Tänzer mit WR-A), WR-A-Std, WR-A-Lat, WR-S-Std, WR-S-Lat, WR-S-RL-Std,
-WR-S-RL-Lat, WR-S-DM-Std, WR-S-DM-Lat
+WR-D (alle aktiven C-Tänzer mit WR-C), WR-C, WR-B-Std, WR-B-Lat,
+WR-A-Std, WR-A-Lat, WR-S-Std, WR-S-Lat, WR-S-RL-Std, WR-S-RL-Lat,
+WR-S-DM-Std, WR-S-DM-Lat
 
-Bemerkung: Bei Angabe von WR-D oder WR-B sollen keine höheren, weiteren
+Bemerkung: Bei Angabe von WR-D sollen keine höheren, weiteren
 Lizenzwerte übertragen werden.
 
 *WR-Formation Std/Lat:* +
