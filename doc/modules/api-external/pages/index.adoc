@@ -2,22 +2,56 @@
 
 == Änderungshistorie
 
-*6.12.2014 / Version 1.0*
+*15.04.2015 / Version 1.6*
 
-* Dokumente gesplittet und Interfacereihenfolge überarbeitet
+* Schnittstelle zur gesammelten Abfrage der Clubbestätigungen ergänzt
 
 *12.03.2015 / Version 1.5*
 
 * Schnittstelle zur Prüfung der Starterlaubnis ergänzt
 * (Angleichung des Versionsstandes)
 
-*15.04.2015 / Version 1.6*
+*6.12.2014 / Version 1.0*
 
-* Schnittstelle zur gesammelt Abfrage der Clubbestätigungen ergänzt
+* Dokumente gesplittet und Interfacereihenfolge überarbeitet
 
-== Meldesysteme
+== Schnittstellen
 
-=== Starterlaubnis abfragen
+=== Einzelstarterabfrage (lesend)
+
+==== Aufruf
+
+* HTTP-Verb: GET
+* HTTP Header: User + Passwort (Basic Authentication)
+* HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* URL-Parameter: Starter-ID
+* URL-Parameter: Personen-ID/WDSF-MIN, zusammen mit Wettbewerbsart
+
+*Aufruf mit Starter-ID*
+
+[source]
+----
+GET /api/v1/starter/{starterId} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+*Aufruf mit Personen-ID bzw. WDSF-MIN und Wettbewerbsart*
+
+[source]
+----
+GET /api/v1/starter/{wettbewerbsart}/{personenId/WDSF-MIN} HTTP/1.1
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+----
+
+==== Rückgabe
+
+Wie Starter-Eintrag aus Veranstaltungsstartliste (beschrieben in der
+Schnittstellen-Dokumentation für Turnierprogramme). Das Feld [meldungen]
+ist ein leeres Array.
+
+=== Starterlaubnis abfragen (lesend)
 
 ==== Aufruf
 
@@ -35,9 +69,10 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
 ==== Rückgabe
+
 Erlaubnisstatus true oder false (JSON) mit HTTP-Ergebniscode
 
-=== Meldeeingang schreiben
+=== Meldung erfassen (schreibend)
 
 ==== Aufruf
 
@@ -57,10 +92,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 ==== Rückgabe
 
-nur HTTP-Ergebniscode
+Response-Objekt und HTTP-Ergebnis-Code
 
-=== Bestätigungsstatus lesend
-
+=== Bestätigungsstatus (lesend)
 
 ==== Aufruf
 
@@ -84,15 +118,17 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ** Bestätigungsstatus [status] +
 true (bestätigt), null (keine Info), false (abgelehnt)
 
-== Vereinswebseiten
+=== Paarergebnisse (lesend)
 
-=== Ergebnisse der Tänzer für Club-CMS aufbereitet
+Aufbereitete Ergebnisse z.B. für Club-CMS
 
-Rückblickend für begrenzten Zeitraum (z.B. vergangenes Wochenende) +
- +
-Anfrage: Datum, Zeitraum, Club
+Rückblickend für begrenzten Zeitraum (z.B. vergangenes Wochenende)
 
-Ergebnis:
+==== Aufruf
+
+Datum, Zeitraum, Club
+
+==== Rückgabe
 
 Array aller Ergebnisse der letzten Woche (falls Zeitraum leer)
 

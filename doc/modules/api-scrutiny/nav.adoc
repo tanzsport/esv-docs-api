@@ -1,4 +1,4 @@
 .xref:index.adoc[Turnierprogramme]
-* xref:index.adoc#_änderungshistorie[Einleitung]
+* xref:index.adoc#_einleitung[Einleitung]
 * xref:index.adoc#_schnittstellen[Schnittstellen]
-* xref:index.adoc#_schlüsselverzeichnis[Schlüsselverzeichnis]
+* xref:index.adoc#_anhang[Anhang]

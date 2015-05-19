@@ -1,6 +1,80 @@
 = Schnittstellen Turnierprogramme
 
-== Änderungshistorie
+== Einleitung
+
+=== Änderungshistorie
+
+*19.05.2015 / Version 1.6.2*
+
+* PDF-Upload: Details ergänzt
+* Gesamtstartliste: globales Feld [nachmeldungen] und Feld
+[startmeldungen] je Starter sind leere Arrays
+* API-Responses im Anhang und bei schreibenden Zugriffen ergänzt
+* Dokumentstruktur und –formatierung überarbeitet
+
+*07.05.2015 / Version 1.6.1*
+
+* Zusatzinfo Ergebnisupload Verwarnungs/Disqualifikations-Flag
+* Schlüsselverzeichnis WR-Lizenzen: WR-B getrennt in WR-B-Std und
+WR-B-Lat
+* Angabe, welche Felder in der Gesamtstartliste einer Wettbewerbsart
+NULL sind
+* Ergebnisupload und digitale WR-Zettel: Vorgabe zur Verfahrensweise,
+wenn Tänze in einer Runde nicht getanzt wurden
+* Digitaler WR-Zettel: Datentyp für Einzelkreuz ist gemischt (Float für
+Wertung oder „L“ für Lift); Vorgabe zur Verfahrensweise, wenn die
+Wertungsdaten nicht vollständig digital vorliegen; Feldname für
+Unterschrift ergänzt
+* Skatingtabelle: Klarstellung zur Übermittlung, falls das Skatingsystem
+nicht angewandt wurde
+
+*25.03.2015 / Version 1.6*
+
+* Ergebnis-Interface ergänzt um Sterne-Info bei Startern
+
+*12.03.2015 / Version 1.5*
+
+* Startlistendownload: Flag Nachmeldeerlaubnis nun Array; Klarstellung
+zu globalen Parametern in der Gesamtstarterliste je Wettbewerbsart
+* Ranglistenschnittstelle: Beispielaufruf ohne Stichtag ergänzt
+* Aufstiegstabelle: Feld Zielklasse ergänzt
+* Neue Schnittstelle: Ausgefallenes (einzelnes) Turnier
+* Leerzeichen und Punkte aus Konstanten im Schlüsselverzeichnis entfernt
+(LTVs, Startgruppen, Startklassen, RL-IDs)
+
+*03.03.2015 / Version 1.4.1*
+
+* Feldnamen JSON ergänzt (keine inhaltlichen Änderungen)
+* Abkürzungen für Tänze (gem. TSO) und Wettbewerbsarten korrigiert
+* Schnittstelle Aufstiegstabelle ergänzt (fehlte in dieser Version des
+Dokumentes)
+
+*13.02.2015 / Version 1.4*
+
+* Alle GET/POST-Aufrufe auf vereinbarten Modus reduziert
+* Einzelstarteraufruf erweitert
+* Ergebnisupload um Clubdaten bereinigt
+
+*06.02.2015 / Version 1.3*
+
+* Veranstaltungsdownload: Flag entfernt
+* Startlistendownload: Startbuchdaten sind ein Array über alle
+betroffenen Turnierarten
+* Startlistendownload: Startsperre-Flag eingefügt
+* Ranglistendownload um ein Feld erweitert
+* Ergebnisupload: Platz-Felder erweitert
+* Abkürzungen hinten angefügt
+* Fehlercodes vergeben
+
+*28.01.2015 / Version 1.2*
+
+* Ergebnisupload, Punkt Startbuch->Ziel-Startklasse überarbeitet
+* Prüfsummenmechanismus ergänzt
+
+*21.01.2015 / Version 1.1*
+
+* Ergebnisupload überarbeitet
+* Starterdownload überarbeitet
 
 *9.12.2014 / Version 1.0*
 
@@ -27,71 +101,7 @@ Wertungen, Wertungstabellen und Digitale Wertungen überarbeitet)
 * Digitale Wertungsrichterzettel JSON überarbeitet und Felder aus dem
 eigentlichen Ergebnisdatensatz rausgenommen. Ist getrennt zu übertragen
 
-*21.01.2015 / Version 1.1*
-
-* Ergebnisupload überarbeitet
-* Starterdownload überarbeitet
-
-*28.01.2015 / Version 1.2*
-
-* Ergebnisupload, Punkt Startbuch->Ziel-Startklasse überarbeitet
-* Prüfsummenmechanismus ergänzt
-
-*06.02.2015 / Version 1.3*
-
-* Veranstaltungsdownload: Flag entfernt
-* Startlistendownload: Startbuchdaten sind ein Array über alle
-betroffenen Turnierarten
-* Startlistendownload: Startsperre-Flag eingefügt
-* Ranglistendownload um ein Feld erweitert
-* Ergebnisupload: Platz-Felder erweitert
-* Abkürzungen hinten angefügt
-* Fehlercodes vergeben
-
-*13.02.2015 / Version 1.4*
-
-* Alle GET/POST-Aufrufe auf vereinbarten Modus reduziert
-* Einzelstarteraufruf erweitert
-* Ergebnisupload um Clubdaten bereinigt
-
-*03.03.2015 / Version 1.4.1*
-
-* Feldnamen JSON ergänzt (keine inhaltlichen Änderungen)
-* Abkürzungen für Tänze (gem. TSO) und Wettbewerbsarten korrigiert
-* Schnittstelle Aufstiegstabelle ergänzt (fehlte in dieser Version des
-Dokumentes)
-
-*12.03.2015 / Version 1.5*
-
-* Startlistendownload: Flag Nachmeldeerlaubnis nun Array; Klarstellung
-zu globalen Parametern in der Gesamtstarterliste je Wettbewerbsart
-* Ranglistenschnittstelle: Beispielaufruf ohne Stichtag ergänzt
-* Aufstiegstabelle: Feld Zielklasse ergänzt
-* Neue Schnittstelle: Ausgefallenes (einzelnes) Turnier
-* Leerzeichen und Punkte aus Konstanten im Schlüsselverzeichnis entfernt
-(LTVs, Startgruppen, Startklassen, RL-IDs)
-
-*25.03.2015 / Version 1.6*
-
-* Ergebnis-Interface ergänzt um Sterne-Info bei Startern
-
-*07.05.2015 / Version 1.6.1*
-
-* Zusatzinfo Ergebnisupload Verwarnungs/Disqualifikations-Flag
-* Schlüsselverzeichnis WR-Lizenzen: WR-B getrennt in WR-B-Std und
-WR-B-Lat
-* Angabe, welche Felder in der Gesamtstartliste einer Wettbewerbsart
-NULL sind
-* Ergebnisupload und digitale WR-Zettel: Vorgabe zur Verfahrensweise,
-wenn Tänze in einer Runde nicht getanzt wurden
-* Digitaler WR-Zettel: Datentyp für Einzelkreuz ist gemischt (Float für
-Wertung oder „L“ für Lift); Vorgabe zur Verfahrensweise, wenn die
-Wertungsdaten nicht vollständig digital vorliegen; Feldname für
-Unterschrift ergänzt
-* Skatingtabelle: Klarstellung zur Übermittlung, falls das Skatingsystem
-nicht angewandt wurde
-
-== Anmerkungen zum Datenmodell
+=== Datenmodell
 
 * Veranstalter und Veranstalter-ID +
 ist i.d.R. ein Verein, es kann aber auch ein LTV sein oder auch der
@@ -106,7 +116,7 @@ Jedes Turnier ist eindeutig einem Ausrichter zugeordnet.
 * Veranstaltung +
 sind alle Turniere, die ein Veranstalter für ein (auch verlängertes)
 Wochenende angemeldet hat. Beispiele: GOC, Blaues Band der Spree, Hessen
-tanzt, danceComp, Tanzen im Dreiländereck (Aachen). Es ist nötig
+tanzt, danceComp, Tanzen im Dreiländereck (Aachen). Es ist nötig,
 Veranstaltungen als eigenständige Entität mit eigener ID zu erstellen.
 * Starter-ID (übergreifend über alle Tänzer der tänzerischen
 Einheit/Paar/Gruppe etc.) +
@@ -137,11 +147,11 @@ Schnittstelle zugegriffen werden kann.
 Diese Felder sind grundsätzlich immer im Datensatz vorhanden, ggf.
 werden sie mit NULL gefüllt.
 * Staaten +
-in 3-Buchstaben-Olympiccode, bei den Staaten ohne solchen: ISO-3-code
+in 3-Buchstaben-Olympiccode, bei den Staaten ohne solchen: ISO-3-Code
 * User und Passwort +
 Als User und Passwort werden die Vereinsportal-Zugangsdaten verwendet
 
-== Anmerkungen zum Ablauf
+=== Ablauf
 
 * Lesen der Startlisten +
 Das Turnierprogramm wird zuerst die Liste der Veranstaltungsdaten (des
@@ -154,7 +164,7 @@ werden. +
 Wird ein Turnierprogramm im Live-Modus betrieben, können die Daten der
 Einzelstarter ebenfalls beliebig oft abgefragt werden.
 
-== Anmerkungen zur Kodierung
+=== Kodierung
 
 * Alle Datensätze werden als JSON-Konstrukt übertragen (Feldnamen in
 eckigen Klammern)
@@ -171,26 +181,6 @@ dargestellt.
 * Alle JSON-Schnittstellen sollen transparente HTTP-Komprimierung
 unterstützten (gzip, deflate via Accept-Encoding und Content-Encoding)
 
-== Ergebniscodes
-
-* 200 OK
-* 403 Login inkorrekt
-* 400 Datenkonstrukt ungültig (Bad request)
-* 404 Ressource existiert nicht (Ergebnis, Funktionär, Starter etc.)
-* 601 Token abgelehnt
-* 602 Veranstaltung bereits hochgeladen und Datensatz geschlossen
-* 603 Ergebnisupload nach Frist, Turnier wird der nächsten Woche
-zugerechnet
-* 604 Ergebnisdatensatz unvollständig (Fehlerdetails im response body)
-* 605 Starter nicht startberechtigt in angefragter Turnierart
-* 606 Datenempfang unvollständig
-* 610 Zugriff zur Sandbox abgelehnt, Turnier-ID des Arbeitssystems
-verwendet
-* Ergebniscodes für Meldeeingänge (z.B. OK, nicht erlaubt, abgelehnt da
-Doppelmeldung…)
-* Ergebniscodes für Meldebestätigungen (noch offen, bestätigt,
-abgelehnt)
-
 == Schnittstellen
 
 === Veranstaltungsdaten (lesend)
@@ -200,7 +190,9 @@ Rückgabeformat „Veranstaltung“ könnte aber auch für den
 Tanzsport.de-Turnierkalender Verwendung finden. Deshalb werden mehr
 Werte zurückgegeben als für die Turnierprogramme benötigt.
 
-==== Aufruf Liste
+==== Liste
+
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -213,17 +205,20 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Rückgabe Liste
+===== Rückgabe
 
-Jede Veranstaltung eine Zeile, alle Veranstaltungen in den folgenden 2 Monaten bei Vereinsanfrage/alle bei Landesanfrage, zu denen der User Berechtigung hat
+* Array Veranstaltungen (alle Veranstaltungen in den folgenden 2 Monaten
+bei Vereinsanfrage/alle bei Landesanfrage, zu denen der User
+Berechtigung hat)
+** Veranstaltungs-ID [id]
+** Datum Von [datumVon]
+** Datum Bis [datumBis]
+** Ort [ort]
+** Titel (optional) [titel]
 
-* Veranstaltungs-ID [id]
-* Datum Von [datumVon]
-* Datum Bis [datumBis]
-* Ort [ort]
-* Titel (optional) [titel]
+==== Einzelaufruf
 
-==== Aufruf Veranstaltung
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -237,7 +232,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Rückgabe Veranstaltung
+===== Rückgabe
 
 * Veranstaltung
 ** Veranstaltungs-ID [id]
@@ -321,14 +316,20 @@ oder mehrere LTV;) [zulassung]
 
 === Startlisten (lesend)
 
-==== Aufruf Veranstaltung
+Startlisten können für eine spezifische Veranstaltung oder als
+Gesamtstartliste für eine Wettbewerbsart zur Offline-Verwendung
+heruntergeladen werden. Die Gesamtstartliste einer enthält aus
+Datenschutzgründen keine Namen der Personen (Feldwerte [titel],
+[vorname], [nachname], [geschlecht] sind NULL).
+
+==== Veranstaltung
+
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Veranstaltungs-ID (ggf. optional)
-* URL-Parameter: Wettbewerbsart (wenn keine Veranstaltungs-ID angegeben
-wurde)
 
 [source]
 ----
@@ -337,23 +338,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-[source]
-----
-GET /api/v1/startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
-Authorization: Basic dXNlcjpwYXNzd29yZA==
-User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
-----
-
-==== Abruf der Gesamt-Starterliste
-
-Wird keine Veranstaltungs-ID angegeben, muss die Wettbewerbsart
-angegeben werden, damit die Gesamt-Starterliste für die jeweilige
-Wettbewerbsart für die Offline-Verwendung heruntergeladen werden kann.
-Die Gesamt-Startliste einer Wettbewerbsart enthält aus
-Datenschutzgründen keine Namen der Personen (Feldwerte [titel],
-[vorname], [nachname], [geschlecht] sind NULL).
-
-==== Rückgabe Veranstaltung (Gesamt-Starterliste analog ohne Namen)
+==== Rückgabe
 
 *Global*:
 
@@ -361,13 +346,13 @@ Datenschutzgründen keine Namen der Personen (Feldwerte [titel],
 gestartet, 1 = Meldestand noch nicht final, 2 = Meldestand final)
 [status]; NULL in Gesamt-Starterliste
 * Array Nachmeldungen möglich: Liste der Turnier-IDs mit
-Nachmeldeerlaubnis [nachmeldungen]; NULL in Gesamt-Starterliste
+Nachmeldeerlaubnis [nachmeldungen]; leer in Gesamt-Starterliste
 
 Erläuterung: +
 Turnierprogramme können die Startdaten ab dem Start der Turniermeldungen
 herunterladen (z.Z. der 21. des Vorvormonats). Der finale Meldestand
 inkl. der aktuellen Aufstiegsdaten kann frühestens am Tag vor dem
-Turnier geladen werden – er wird in diesem Flag als solcher
+Turnier geladen werden – er wird im Gültigkeits-Flag als solcher
 gekennzeichnet.
 
 *Starterweise [starter]*:
@@ -397,8 +382,8 @@ Ersatztänzer) [personen]:
 *** LTV-ID [id]
 *** LTV-Name [name]
 * Staat (Staat, für den der Starter an den Start geht) [staat]
-* Meldungen (Array, nicht vorhanden bei Aufruf der Gesamt-Starterliste
-für eine Wettbewerbsart) [meldungen]
+* Meldungen (Array, leer bei Aufruf der Gesamt-Starterliste für eine
+Wettbewerbsart) [meldungen]
 ** Turnier-ID (nur die IDs der Turniere der aufgerufenen Veranstaltung)
 [turnierId]
 ** Flag Meldung (Meldung = true, Abmeldung = false) [meldung]
@@ -439,34 +424,28 @@ Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
 *** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
 [verwarnungSchrittbegrenzung]
 
-==== Aufruf Einzelstarter
+==== Wettbewerbsart
+
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
-* URL-Parameter: Starter-ID
-* URL-Parameter: Personen-ID/WDSF-MIN, zusammen mit Wettbewerbsart
-
-Aufruf entweder per Starter-ID, per Personen-ID bzw. WDSF-MIN (und
-Wettbewerbsart).
+* URL-Parameter: Wettbewerbsart
 
 [source]
 ----
-GET /api/v1/starter/{starterId} HTTP/1.1
+GET /api/v1/startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-[source]
-----
-GET /api/v1/starter/{wettbewerbsart}/{personenId} HTTP/1.1
-Authorization: Basic dXNlcjpwYXNzd29yZA==
-User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
-----
+===== Rückgabe
 
-==== Rückgabewerte Einzelstarter
-
-wie Starter-Eintrag aus Veranstaltungsstartliste, jedoch ohne Meldungen
+Wie Startliste für Veranstaltung. Die Felder [titel], [vorname],
+[nachname], [geschlecht] sind NULL, das Feld [startmeldungen] ist ein
+leeres Array. Die globalen Felder [status] und [nachmeldungen] sind NULL
+bzw. leer.
 
 === Ranglisten (lesend)
 
@@ -499,7 +478,7 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 * Global-je-RL
 ** RL-ID [id]
-** Stand (Datum der letzten Änderung) [id]
+** Stand (Datum der letzten Änderung) [stand]
 * Array Starter [starter]:
 ** Starter-ID [id]
 ** Rang [rang]
@@ -521,9 +500,15 @@ Herr-ID, Dame-ID,…) [personen]
 ** Anz. teilgenommene Turniere in der Saison (evtl. verwendbar für die
 DM-Warnung in Std/Lat) [anzahlTurniere]
 
-=== Funktionäre/Lizenzträger (lesend) Einzelaufruf
+=== Funktionäre/Lizenzträger (lesend)
 
-==== Aufruf
+Lizenzträger können im Einzelabruf oder als Gesamtliste geladen werden.
+Die Gesamtliste muss im Turnierprogramm nach sieben Tagen gelöscht
+werden. Danach muss sie ggf. erneut heruntergeladen werden.
+
+==== Einzelaufruf
+
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -537,7 +522,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Rückgabe
+===== Rückgabe
 
 * Personen-ID [id]
 * WDSF-MIN (optional, sofern verfügbar) [wdsfMin]
@@ -555,11 +540,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 * Array Lizenzen [lizenzen]
 ** Lizenz-IDs (Auflistung aller gültigen Funktionärs-Lizenzen)
 
-=== Funktionäre/Lizenzträger – Gesamtdatei des DTV (lesend)
+==== Gesamtliste
 
-Intern mit Gültigkeit 7 Tage
-
-==== Aufruf
+===== Aufruf
 
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -572,7 +555,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Rückgabe
+===== Rückgabe
 
 * Array (Elemente wie Einzelaufruf, Namen und Titel NULL)
 
@@ -618,41 +601,32 @@ Aufstieg ermöglichen wird NULL zurückgeliefert (z.B. BSW)
 **** Platzierung Bis Platz [bisPlatz]
 **** Doppelstart: true/false, kennzeichnet Aufstiege in Startklassen,
 die nur im Doppelstart genutzt werden können [doppelstart]
+**** Doppelstart: true/false, kennzeichnet Aufstiege in Startklassen,
+die nur im Doppelstart genutzt werden können [doppelstart]
 
-=== Ergebnisse (schreibend, evtl. lesend)
+=== Ergebnisse (schreibend)
 
-Absichtlicher Zeitversatz der Darstellung beim Live-Mode?
-
-Die Ergebnisse eines Turniers können mehrfach geschrieben werden, z.B.
+Die Ergebnisse eines Turniers können mehrfach hochgeladen werden, z.B.
 im Live-Modus nach jeder Runde. Dabei können sich auch die Inhalte des
-übergreifenden Berichtes verändern. Das ESV-System muss erkennen können,
-wann die Daten vollständig sind –wenn die Prüfsumme enthalten ist, sind
-die Daten komplett (Turnier beendet). Danach können die Ergebnisse noch
-weitere 4 Stunden hochgeladen werden. Nach 4 Stunden lässt das
+übergreifenden Berichtes verändern.
+
+Erst nach Turnierende muss/darf die Prüfsumme enthalten sein. Dies ist
+für das ESV-System das Signal, das die Daten komplett sind (Turnier
+beendet). Danach können die Ergebnisse noch weitere 4 Stunden für
+Korrekturen erneut hochgeladen werden. Nach 4 Stunden lässt das
 ESV-System ein Hochladen nicht mehr zu.
 
-Die übertragene Prüfsumme sollte im ESV-Portal mit einer nach
-Datenerhalt berechneten Prüfsumme verglichen werden und bei
-Nichtübereinstimmung den Admin alarmieren. Solche Ergebnisse sollen
-vorläufig nicht direkt dargestellt werden. Weitere Prüfwerte sind zum
-Beispiel die Endrundenplatzziffern.
-
-Das Hochladen von Zwischenergebnissen (und der reinen Startliste) soll
-möglich sein. Solange das Turnier noch läuft sind Daten wie: Endzeit,
+Das Hochladen von Zwischenergebnissen (auch nur der reinen Startliste)
+ist möglich. Solange das Turnier noch läuft sind Daten wie: Endzeit,
 Ergebnis und Wertung (für noch nicht ausgeschiedene Starter) optional
 und Rundenablauf nur teilvollständig. Das Starter-Array muss trotzdem
 bei jedem Upload komplett (alle Starter inkl. abwesende) hochgeladen
-werden. Jeder Upload überschreibt immer den vorherigen komplett. Ein
-Übertrag der Daten in die Bücher erfolgt sofort (aber ohne
-Punkt+Platzierungssummen darzustellen. Es muss klar hervorgehoben
-werden, dass diese Ergebnisse vorläufiger Natur sind). Aufstiege und
-Gesamtsummen werden erst nach Ablauf des Turnierwochenendes (alle
-Uploads eingetroffen) dargestellt.
+werden. Jeder Upload überschreibt immer den vorherigen komplett.
 
 Die Prüfsumme besteht aus den ersten 6 Stellen des SHA-1-Hashs des
 JSON-Datenstreams.
 
-==== Aufruf Turnier
+==== Aufruf
 
 * HTTP-Verb: POST
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -668,7 +642,7 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 X-DTV-Pruefsumme: ff621b
 ----
 
-==== Inhalte
+==== Inhalt
 
 *Übergreifend Bericht*:
 
@@ -810,8 +784,7 @@ Staat.
 
 ==== Rückgabe
 
-Daten erfolgreich angenommen, bzw. Informationen über mögliche Fehler
-(z.B. geschlossen, etc)
+Response-Objekt und HTTP-Ergebnis-Code
 
 === Ausgefallenes Turnier (schreibend)
 
@@ -819,7 +792,7 @@ Dieser Aufruf ist immer ein Turnierabschluss und startet die
 vier-Stunden-Frist zum Schließen des Turniers. Innerhalb der Frist muss
 auch ein Upload von „echten“ Ergebnissen ersatzweise möglich sein.
 
-==== Aufruf Turnier
+==== Aufruf
 
 * HTTP-Verb: POST
 * HTTP Header: User + Passwort (Basic Authentication)
@@ -833,17 +806,25 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Inhalte
+==== Inhalt
 
 * Vorkommnisse (optional) [vorkommnisse]
 
-=== Wertungsrichterzettel (PDF)
+==== Rückgabe
+
+Response-Objekt und HTTP-Ergebnis-Code
+
+=== Wertungsrichterzettel PDF (schreibend)
+
+Über diese Schnittstelle können eingescannte Wertungsrichterzettel als
+PDF-Dateien hochgeladen werden.
 
 ==== Aufruf
 
 * HTTP-Verb: POST
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* Content-Type: multipart/form-data
 * URL-Parameter: Turnier-ID
 
 [source]
@@ -853,11 +834,32 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Inhalte
+==== Inhalt
 
-* PDF-Files
+Der Multipart-Request-Body enthält beliebig viele PDF-Dateien. Der Name
+der Parts kann frei gewählt werden:
 
-=== Wertungsrichterzettel (JSON)
+[source]
+----
+Content-Type: multipart/form-data; boundary=----Boundary
+----Boundary
+Content-Disposition: form-data; name="a"; filename="WRZettel1.pdf"
+Content-Type: application/pdf
+
+----Boundary
+Content-Disposition: form-data; name="b"; filename="WRZettel2.pdf"
+Content-Type: application/pdf
+----
+
+==== Rückgabe
+
+Response-Objekt und HTTP-Ergebnis-Code
+
+=== Wertungsrichterzettel digital (schreibend)
+
+Über diese Schnittstelle können die Original-Daten der digitalen
+Wertungsrichterzettel hochgeladen werden. Die Verwendung ist nur
+zulässig, wenn tatsächlich digitale Wertungsgeräte zum Einsatz kommen.
 
 ==== Aufruf
 
@@ -874,7 +876,7 @@ Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 ----
 
-==== Inhalte
+==== Inhalt
 
 Bei Formations/JMD-Wertungen läuft das Wertungsarray immer über 5/4
 virtuelle Tänze +
@@ -895,19 +897,25 @@ Runde nicht getanzt wurde)
 ** Unterschrift (Base64-kodiertes PNG-Bild 1bit, max. 400*200 Pixel)
 [unterschrift]
 
-== Schlüsselverzeichnis
+==== Rückgabe
 
-=== LTVs
+Response-Objekt und HTTP-Ergebnis-Code
+
+== Anhang
+
+=== Schlüsselverzeichnis
+
+==== LTVs
 
 HATV, HTV, LTVBerlin, LTVBr, LTVBremen, LTVB, LTVS, NTV, SLT, TBW, TMV,
 TNW, TRP, TSH, TTSV, LTVSA
 
-=== Wettbewerbsarten
+==== Wettbewerbsarten
 
 Einzel, FormationStdLat, Mannschaft, Solo, SoloMaennlich, SoloWeiblich,
 Duo, SmallGroup, FormationJMD
 
-=== Turnierformen
+==== Turnierformen
 
 DM (Deutsche Meisterschaft), DP (Deutschlandpokal), DC (Deutschlandcup),
 RLT (Rangliste), +
@@ -918,36 +926,36 @@ PDT (PD Trophy), LT (Ligaturnier), IMK (Int. Länderkampf Mannschaft), MK
 (Mannschaftskampf), +
 RM (Regionalmeisterschaft JMD)
 
-=== Startgruppen
+==== Startgruppen
 
 KinI, KinII, Kin, JunI, JunII, Jug, Hgr, HgrII, SenI, SenII, SenIII,
 SenIV, U21, MCI, MCII
 
 Ggf. Kombinationen aus diesen Abkürzungen (z.B. Jug/Hgr, SenI/II)
 
-=== Startklassen
+==== Startklassen
 
 BSW, D, C, B, A, S, PD, 1BL, 2BL, RL, OL, LL, VL
 
-=== Turnierarten
+==== Turnierarten
 
 Std, Lat, Kmb, JMD, SD-Std, SD-Lat
 
-=== Ranglisten-IDs
+==== Ranglisten-IDs
 
 JunII-Std, JunII-Lat, Jug-Std, Jug-Lat, Hgr-Std, Hgr-Lat, Hgr-RS-Std,
 Hgr-RS-Lat, SenI-Std, SenII-Std, G55-Std, LS66-Std, Jug-SoloM-JMD,
 Jug-SoloW-JMD, Jug-Duo-JMD, Jug-SG-JMD, Hgr-SoloM-JMD, Hgr-SoloW-JMD,
 Hgr-Duo-JMD, Hgr-SG-JMD
 
-=== Lizenztypen
+==== Lizenztypen
 
-Mehrfachnennung im Interface sehr wahrscheinlich
+===== Turnierleiter
 
-*Turnierleiter*: +
 TL, TL-JMD
 
-*WR-Einzel*: +
+===== WR-Einzel
+
 WR-D (alle aktiven C-Tänzer mit WR-C), WR-C, WR-B-Std, WR-B-Lat,
 WR-A-Std, WR-A-Lat, WR-S-Std, WR-S-Lat, WR-S-RL-Std, WR-S-RL-Lat,
 WR-S-DM-Std, WR-S-DM-Lat
@@ -955,25 +963,58 @@ WR-S-DM-Std, WR-S-DM-Lat
 Bemerkung: Bei Angabe von WR-D sollen keine höheren, weiteren
 Lizenzwerte übertragen werden.
 
-*WR-Formation Std/Lat:* +
+===== WR-Formation Std/Lat
+
 WR-F1, WR-F2, WR-F-BL, WR-F-DM,
 
-*WR-JMD*: +
+===== WR-JMD
+
 WR-J1, WR-J2, WR-J1-DM, WR-J2-DM
 
-=== Tänze
+==== Tänze
 
 LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
 
-=== Runden
+==== Runden
 
 1, R, 2, 3, 4, 5, 6, 7, 8, 9, F +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
 B-Finale=FB)
 
-=== Wertungstyp
+==== Wertungstyp
+
 K (Kreuze), M (Mannschaftspunkte{1..1,5..2..2,5..3}), P
 (Finalplätze{1..x}), +
 FK (FormationswertungKreuze), FP (FormationswertungPlätze), JK
 (JMD-WertungenKreuze), +
 JP (JMD-WertungenPlätze), JS (JudgingSystem2.x)
+
+=== Ergebniscodes
+
+* 200 OK
+* 403 Login inkorrekt
+* 400 Datenkonstrukt ungültig (Bad request)
+* 404 Ressource existiert nicht (Ergebnis, Funktionär, Starter etc.)
+* 601 Token abgelehnt
+* 602 Veranstaltung bereits hochgeladen und Datensatz geschlossen
+* 603 Ergebnisupload nach Frist, Turnier wird der nächsten Woche
+zugerechnet
+* 604 Ergebnisdatensatz unvollständig (Fehlerdetails im response body)
+* 605 Starter nicht startberechtigt in angefragter Turnierart
+* 606 Datenempfang unvollständig
+* 610 Zugriff zur Sandbox abgelehnt, Turnier-ID des Arbeitssystems
+verwendet
+* Ergebniscodes für Meldeeingänge (z.B. OK, nicht erlaubt, abgelehnt da
+Doppelmeldung…)
+* Ergebniscodes für Meldebestätigungen (noch offen, bestätigt,
+abgelehnt)
+
+=== API-Responses
+
+Schreibzugriffe auf die API liefern ein allgemeines Response-Objekt als
+JSON zurück:
+
+* Fehlercode (korrespondiert mit HTTP-Ergebnis-Code) [code]
+* Fehlermeldung [fehler]
+* Detail (optional) [detail]
+
