@@ -17,10 +17,12 @@ Chairpersonen
 * Ergebnis: Eigenschaften Startgruppe, Startklasse und Wettbewerbsart
 für den Starter zur Prüfung von Ergebnissen, die nach Anhang 5 berechnet
 wurden.
-* Ergebnis: Header X-DTV-Pruefsumme entfernt und X-DTV-Endergegbnis
+* Ergebnis: Header X-DTV-Pruefsumme entfernt und X-DTV-Endergebnis
 hinzugefügt.
-* Flag für Startaufstellung in Startlisten (Gruppen und Formationen) ergänzt.
-* Stichrunden bei Gruppen- und Formationswettbewerben ergänzt.
+* Startliste: Flag für Startaufstellung in Startlisten (Gruppen und Formationen) ergänzt.
+* Ergebnis: Erweiterung Rundenablauf um Rundentyp Stichrunde (für Stich-
+und Relegationsrunden bei Gruppen- oder Formationswettbewerben) sowie
+neues Feld für Stichrundentabellen
 
 *19.05.2015 / Version 1.6.2*
 
