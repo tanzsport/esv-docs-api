@@ -796,8 +796,8 @@ wurden.
 2; gem. Schlüsselverzeichnis)
 ** Hier muss die ursprüngliche Wettbewerbsart des Turniers angegeben
 werden, für das der Starter gemeldet war.
-** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
-wurden.
+** Dient der Prüfung von Ergebnissen bei gemeinsam durchgeführten
+Turnieren der Wettbewerbsarten SoloMaennlich und SoloWeiblich.
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
 nur-Startliste) [ergebnis]
 ** Platz-Gesamtergebnis Von [platzGesamtVon]
