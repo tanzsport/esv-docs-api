@@ -6,6 +6,7 @@
 
 *xx.xx.xxxx / Version 2.0.0*
 
+* Hinweise zu Schnittstellen-Level 2 und JSON-Schemata
 * Funktionäre/Lizenzträger (Einzelaufruf und Gesamtliste): das Jahr als
 optionalen URL-Parameter zugefügt
 * Funktionäre/Lizenzträger (Gesamtliste): Gesamtliste liefert auch Namen
@@ -188,6 +189,38 @@ direkt in UTF-8.
 dargestellt.
 * Alle JSON-Schnittstellen sollen transparente HTTP-Komprimierung
 unterstützten (gzip, deflate via Accept-Encoding und Content-Encoding)
+
+===  Schnittstellen-Level
+
+* Mit Version 2.0.0 wird für alle beschreibbaren Endpunkte ein
+Schnittstellen-Level eingeführt. Da es sich nur um abwärtskompatible
+Änderungen der Struktur handelt, die jedoch hohe inhaltliche Relevanz
+haben, gibt es keine neue Endpunkt-URL.
+* Für alle Endpunkte gibt es ab Version 2.0.0 ein JSON-Schema
+(json-schema.org, draft-06), das eine grundsätzliche Validierung der
+JSON-Daten ermöglicht.
+* Sofern es sich um beschreibbare Endpunkte handelt, muss der durch das
+Turnierprogramm verwendete Schnittstellen-Level durch die Angabe der URI
+des verwendeten JSON-Schemas (korrespondierend mit dem
+Schnittstellen-Level) über die Eigenschaft $schema des JSON-Dokuments
+erfolgen, sofern ein Schnittstellen-Level > 1 verwendet wird.
+* Die Schema-Dateien können über die jeweilige Schema-URI bezogen
+werden.
+* Unter https://github.com/tanzsport/esv-json-schema kann ein
+GIT-Repository der Schema-Dateien inkl. Kompatibilitäts-Tester
+(basierend auf NodeJS) bezogen werden.
+* Die für die jeweiligen Endpunkte gültigen Level-Schemas sind der
+folgenden Tabelle zu entnehmen.
+
+[cols=",,",options="header",]
+|===
+|*Endpunkt* |*Level* |*Schema-URI*
+|Ergebnisse |2
+|http://schema.tanzsport.de/json/esv/v1/ergebnis-level2.json
+
+|WR-Zettel (digital) |2
+|http://schema.tanzsport.de/json/esv/v1/wrzetteldigi-level2.json
+|===
 
 == Schnittstellen
 
@@ -656,6 +689,8 @@ X-DTV-Pruefsumme: ff621b
 
 *Übergreifend Bericht*:
 
+* URI des verwendetes JSON-Schemas [$schema] (verpflichtend ab
+Schnittstellen-Level 2)
 * Tänze (Array, max. 10 Tänze) [taenze]
 ** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
 DF, SA,..)
@@ -892,6 +927,8 @@ Bei Formations/JMD-Wertungen läuft das Wertungsarray immer über 5/4
 virtuelle Tänze +
 (Tanz 1-4/3: Wertungsgebiete Punkte 0-10, Tanz 5/4: Kreuz oder Platz).
 
+* URI des verwendeten JSON-Schemas [$schema] (verpflichtend ab
+Schnittstellen-Level 2)
 * Array über alle WR (in der Reihenfolge wie im Ergebnisupload; das
 Element ist NULL, wenn die Wertungen nicht vollständig digital erfasst
 wurden, z.B. wenn teilweise oder vollständig auf Papier gewertet wurde)
