@@ -8,6 +8,8 @@
 
 * Funktionäre/Lizenzträger (Einzelaufruf und Gesamtliste): das Jahr als
 optionalen URL-Parameter zugefügt
+* Funktionäre/Lizenzträger (Gesamtliste): Gesamtliste liefert auch Namen
+zurück
 
 *19.05.2015 / Version 1.6.2*
 
@@ -564,7 +566,7 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 ===== Rückgabe
 
-* Array (Elemente wie Einzelaufruf, Namen und Titel NULL)
+* Array (Elemente wie Einzelaufruf)
 
 === Aufstiegstabellen (lesend)
 
