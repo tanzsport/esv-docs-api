@@ -19,6 +19,7 @@ für den Starter zur Prüfung von Ergebnissen, die nach Anhang 5 berechnet
 wurden.
 * Ergebnis: Header X-DTV-Pruefsumme entfernt und X-DTV-Endergegbnis
 hinzugefügt.
+* Flag für Startaufstellung in Startlisten (Gruppen und Formationen) ergänzt.
 
 *19.05.2015 / Version 1.6.2*
 
@@ -423,6 +424,11 @@ Ersatztänzer) [personen]:
 [geschlecht]
 ** WDSF-MIN (optional, sofern vorhanden) [wdsfMin]
 ** Nationalität (3-Buchst.-Code) [nationalitaet]
+** Flag Startaufstellung [startaufstellung] (relevant nur bei Gruppen-
+und Formationen)
+*** alle mit true markierten Personen wurden vom Verein für die
+Startaufstellung benannt, so dass angenommen werden kann, dass diese
+tatsächlich zum Einsatz kommen
 * Club (bei deutschen Paaren Pflicht, sonst optional) [club]
 ** Club-ID [id]
 ** Club-Name [name]
