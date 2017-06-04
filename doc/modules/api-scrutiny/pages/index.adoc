@@ -23,6 +23,7 @@ hinzugefügt.
 * Ergebnis: Erweiterung Rundenablauf um Rundentyp Stichrunde (für Stich-
 und Relegationsrunden bei Gruppen- oder Formationswettbewerben) sowie
 neues Feld für Stichrundentabellen
+* Startliste Wettbewerbsart: Enthält jetzt immer alle Namen.
 
 *19.05.2015 / Version 1.6.2*
 
@@ -499,10 +500,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 ===== Rückgabe
 
-Wie Startliste für Veranstaltung. Die Felder [titel], [vorname],
-[nachname], [geschlecht] sind NULL, das Feld [startmeldungen] ist ein
-leeres Array. Die globalen Felder [status] und [nachmeldungen] sind NULL
-bzw. leer.
+Wie Startliste für Veranstaltung. Das Feld [startmeldungen] je Starter
+ist ein leeres Array. Die globalen Felder [status] und [nachmeldungen]
+sind NULL bzw. leer.
 
 === Ranglisten (lesend)
 
