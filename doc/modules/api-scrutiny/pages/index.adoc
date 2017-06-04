@@ -20,6 +20,7 @@ wurden.
 * Ergebnis: Header X-DTV-Pruefsumme entfernt und X-DTV-Endergegbnis
 hinzugefügt.
 * Flag für Startaufstellung in Startlisten (Gruppen und Formationen) ergänzt.
+* Stichrunden bei Gruppen- und Formationswettbewerben ergänzt.
 
 *19.05.2015 / Version 1.6.2*
 
@@ -735,14 +736,19 @@ konfiguriert)
 * Beginnzeit (ISO8601) [beginn]
 * Endzeit (ISO8601) [ende]
 * Array Rundenablauf (NULL für Upload von nur-Startlisten) [ablauf]
-** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F +
+** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F,SR +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
-B-Finale=FB) [runde]
-** Wertungstyp +
+B-Finale=FB, Stichrunde bei Gruppen- und Formationswettbewerben: SR)
+[runde]
+*** je Stichrunde um Platz X wird das Array um ein Element SR erweitert
+** Wertungstyp [typ] +
 (Kreuze{0..1}=K, Mannschaftspunkte{1..1,5..2..2,5..3}=M,
 Finalplätze{1..x}=P, FormationswertungKreuze=FK,
 FormationswertungPlätze=FP, JMD-WertungenKreuze=JK,
-JMD-WertungenPlätze=JP, JudgingSystem2.x=JS) [typ]
+JMD-WertungenPlätze=JP, JudgingSystem2.x=JS)
+** Platz [platz] (optional; verpflichtend bei Schnittstellen-Level 2) +
+(Platz für den die Stichrunde durchgeführt wurde; NULL für alle
+Rundentypen außer SR)
 * kombiniert mit Turnier-ID (optional) [kombiniertMit]
 * Zuschauerzahl [zuschauer]
 
@@ -814,7 +820,8 @@ werden (in diesem Fall wird vd=2 übertragen).
 * Wertung (Array mit N = Anzahl Runden Elementen; nicht getanzte Runden
 werden als NULL übertragen, Runden nach Ausscheiden werden gar nicht
 übertragen; werden Tänze in der jeweiligen Runde nicht getanzt, ist das
-jeweilige Wertungselement mit NULL anzugeben) [wertung]
+jeweilige Wertungselement mit NULL anzugeben; Starter, die nicht an
+Stichrunden teilgenommen haben, gelten als ausgeschieden) [wertung]
 ** Vorrundenwertung (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
@@ -860,6 +867,11 @@ angewandt ist das jeweilige Element NULL) [skatingtabellen]
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 11 bestimmt, sonst NULL)
+* Array Stichrundetabellen (verpflichtend ab Schnittstellen-Level 2;
+Reihenfolge aus Rundenablauf bezogen nur auf die Stichrunden, d.h. die
+erste Stichrunde hat Index 0; wenn keine Stichrunden durchgeführt wurden
+NULL) [stichrundentabellen]
+** Struktur der Einzelelemente wie bei Endrundentabellen
 
 Bei Startern eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
 haben, sind nur die Namen eingetragen, evtl. der Clubname, aber auch der
@@ -1066,9 +1078,9 @@ LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
 
 ==== Runden
 
-1, R, 2, 3, 4, 5, 6, 7, 8, 9, F +
+1, R, 2, 3, 4, 5, 6, 7, 8, 9, F, SR +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
-B-Finale=FB)
+B-Finale=FB, Stichrunde bei Gruppen- und Formationswettbewerben=SR)
 
 ==== Wertungstyp
 
