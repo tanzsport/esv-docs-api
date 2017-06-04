@@ -10,6 +10,7 @@
 optionalen URL-Parameter zugefügt
 * Funktionäre/Lizenzträger (Gesamtliste): Gesamtliste liefert auch Namen
 zurück
+* Wertungsrichterzettel (digital): Objekt wr ergänzt
 
 *19.05.2015 / Version 1.6.2*
 
@@ -894,6 +895,10 @@ virtuelle Tänze +
 * Array über alle WR (in der Reihenfolge wie im Ergebnisupload; das
 Element ist NULL, wenn die Wertungen nicht vollständig digital erfasst
 wurden, z.B. wenn teilweise oder vollständig auf Papier gewertet wurde)
+** Wertungsrichter [wr]
+*** Personen-ID [id]
+*** Vorname [vorname]
+*** Nachname [nachname]
 ** Kreuzvorgabe von (bei Finale NULL) [kreuzvorgabeVon]
 ** Kreuzvorgabe bis (bei Finale NULL) [kreuzvorgabeBis]
 ** Array über Starter [starter]
