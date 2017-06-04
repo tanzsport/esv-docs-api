@@ -748,7 +748,12 @@ FormationswertungPlätze=FP, JMD-WertungenKreuze=JK,
 JMD-WertungenPlätze=JP, JudgingSystem2.x=JS)
 ** Platz [platz] (optional; verpflichtend bei Schnittstellen-Level 2) +
 (Platz für den die Stichrunde durchgeführt wurde; NULL für alle
-Rundentypen außer SR)
+Rundentypen außer SR) – Achtung, es gibt „echte“ Stichrunden (mit
+Auswirkungen auf das Gesamtergebnis des Turniers z.B. Stichrunden um
+Platz 1 bei DM oder Plätze bei Regionalmeisterschaften) oder
+Relegationsrunden, bei denen das Gesamtergebnis des Turniers nicht
+verändert wird (Austanzen der Relegation zwischen 1. und 2. Bundesliga –
+nur JMD)
 * kombiniert mit Turnier-ID (optional) [kombiniertMit]
 * Zuschauerzahl [zuschauer]
 
