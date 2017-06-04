@@ -12,6 +12,8 @@ optionalen URL-Parameter zugefügt
 * Funktionäre/Lizenzträger (Gesamtliste): Gesamtliste liefert auch Namen
 zurück
 * Wertungsrichterzettel (digital): Objekt wr ergänzt
+* Ergebnis: Kürzel für Wertungsrichter, Turnierleiter, Beisitzer und
+Chairpersonen
 
 *19.05.2015 / Version 1.6.2*
 
@@ -695,6 +697,9 @@ Schnittstellen-Level 2)
 ** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
 DF, SA,..)
 * WR (Array, WR des Turniers) [wr]
+** Buchstaben-Kürzel [kuerzel] (verpflichtend ab Schnittstellen-Level 2)
+*** muss eindeutig für das Turnier sein
+*** max. drei alphanumerische Zeichen
 ** Personen-ID (für DTV-WR Pflicht, für Ersatz-WR optional, für
 Ausländer NULL) [id]
 ** Vorname [vorname]
