@@ -14,6 +14,9 @@ zurück
 * Wertungsrichterzettel (digital): Objekt wr ergänzt
 * Ergebnis: Kürzel für Wertungsrichter, Turnierleiter, Beisitzer und
 Chairpersonen
+* Ergebnis: Eigenschaften Startgruppe, Startklasse und Wettbewerbsart
+für den Starter zur Prüfung von Ergebnissen, die nach Anhang 5 berechnet
+wurden.
 
 *19.05.2015 / Version 1.6.2*
 
@@ -754,6 +757,24 @@ WDSF-Paaren optional) [id]
 * Meldungstyp (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
 Nachmeldung, Aufsteiger = 4) [meldungsTyp]
 * Anzahl Sterne (gesetzte Paare) [sterne]
+* Startgruppe [startgruppe] (verpflichtend ab Schnittstellen-Level 2;
+gem. Schlüsselverzeichnis)
+** Hier muss die in der Startliste angegebene Startgruppe angegeben
+werden.
+** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
+wurden.
+* Startklasse [startklasse] (verpflichtend ab Schnittstellen-Level 2;
+gem. Schlüsselverzeichnis)
+** Hier muss die zum Zeitpunkt des Turniers gültige Startklasse des
+Starters angegeben werden.
+** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
+wurden.
+* Wettbewerbsart [wettbewerbsart] (verpflichtend ab Schnittstellen-Level
+2; gem. Schlüsselverzeichnis)
+** Hier muss die ursprüngliche Wettbewerbsart des Turniers angegeben
+werden, für das der Starter gemeldet war.
+** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
+wurden.
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
 nur-Startliste) [ergebnis]
 ** Platz-Gesamtergebnis Von [platzGesamtVon]
