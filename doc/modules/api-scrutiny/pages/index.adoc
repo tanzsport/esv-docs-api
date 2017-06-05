@@ -396,9 +396,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 
 *Global*:
 
-* Gültigkeits-Flag für Meldestand (0 = Turniermeldungen noch nicht
-gestartet, 1 = Meldestand noch nicht final, 2 = Meldestand final)
-[status]; NULL in Gesamt-Starterliste
+* Status für Meldestand (0 = Turniermeldungen noch nicht gestartet, 1 =
+Meldestand noch nicht final, 2 = Meldestand final) [status]; NULL in
+Gesamt-Starterliste
 * Array Nachmeldungen möglich: Liste der Turnier-IDs mit
 Nachmeldeerlaubnis [nachmeldungen]; leer in Gesamt-Starterliste
 
@@ -406,8 +406,7 @@ Erläuterung: +
 Turnierprogramme können die Startdaten ab dem Start der Turniermeldungen
 herunterladen (z.Z. der 21. des Vorvormonats). Der finale Meldestand
 inkl. der aktuellen Aufstiegsdaten kann frühestens am Tag vor dem
-Turnier geladen werden – er wird im Gültigkeits-Flag als solcher
-gekennzeichnet.
+Turnier geladen werden – er wird im Status als solcher gekennzeichnet.
 
 *Starterweise [starter]*:
 
