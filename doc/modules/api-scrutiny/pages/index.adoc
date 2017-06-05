@@ -25,6 +25,7 @@ und Relegationsrunden bei Gruppen- oder Formationswettbewerben) sowie
 neues Feld für Stichrundentabellen
 * Startliste Wettbewerbsart: Enthält jetzt immer alle Namen.
 * Schlüsselverzeichnis: neue Turnierart Jazz
+* Startliste: Trainer bei Gruppen und Formationen gestrichen
 
 *19.05.2015 / Version 1.6.2*
 
@@ -416,8 +417,6 @@ Mannschaftswettbewerben) [team]
 ** Team-Name (sofern vorhanden, z.B. bei Gruppen+Formationen) [name]
 ** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen+Formationen)
 [kapitaen]
-** Team-Trainer (sofern vorhanden, z.B. bei Gruppen+Formationen)
-[trainer]
 * Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
 Ersatztänzer) [personen]:
 ** Personen-ID (DTV-Nummer) [id]
