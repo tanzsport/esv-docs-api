@@ -24,6 +24,7 @@ hinzugefügt.
 und Relegationsrunden bei Gruppen- oder Formationswettbewerben) sowie
 neues Feld für Stichrundentabellen
 * Startliste Wettbewerbsart: Enthält jetzt immer alle Namen.
+* Schlüsselverzeichnis: neue Turnierart Jazz
 
 *19.05.2015 / Version 1.6.2*
 
@@ -1047,7 +1048,7 @@ BSW, D, C, B, A, S, PD, 1BL, 2BL, RL, OL, LL, VL
 
 ==== Turnierarten
 
-Std, Lat, Kmb, JMD, SD-Std, SD-Lat
+Std, Lat, Kmb, JMD, SD-Std, SD-Lat, Jazz
 
 ==== Ranglisten-IDs
 
