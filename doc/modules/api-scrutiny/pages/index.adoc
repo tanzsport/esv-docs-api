@@ -26,6 +26,8 @@ neues Feld für Stichrundentabellen
 * Startliste Wettbewerbsart: Enthält jetzt immer alle Namen.
 * Schlüsselverzeichnis: neue Turnierart Jazz
 * Startliste: Trainer bei Gruppen und Formationen gestrichen
+* Startliste: Restriktionen für die Aufstellung bei Gruppen- und
+Formationswettbewerben
 
 *19.05.2015 / Version 1.6.2*
 
@@ -448,6 +450,21 @@ Wettbewerbsart) [meldungen]
 ** Startnummer (optional – wird erst später für Ligaturniere relevant
 sein wie JMD und Formation) [startNr]
 ** Flag Startsperre (true/false) [startsperre]
+* Aufstellung (optional, nur Gruppen- und Formationswettbewerbe)
+[aufstellung]
+** Minimal-Anzahl Aktive (Anzahl der Aktiven, die in einer Gruppe oder
+Formation mindestens tanzen müssen) [min]
+*** gilt bei JMD und Jazz für alle Aktiven
+*** gilt bei Formationen Standard/Latein jeweils für Herrren und Damen
+getrennt
+** Maximal-Anzahl Aktive (Anzahl der Aktiven, die in einer Gruppe oder
+Formation maxmimal tanzen dürfen) [max]
+*** gilt bei JMD und Jazz für alle Aktiven
+*** gilt bei Formationen Standard/Latein jeweils für Herren und Damen
+getrennt
+** Ausland (Maximalanzahl der Aktiven ausländischer Nationalität, die in
+einer Gruppe oder Formation tanzen dürfen) [ausland]
+*** NULL, wenn keine Restriktionen vorliegen
 * Array Startbuch turnierartweise (optional, nur Einzelwettbewerbe
 St/Lat und JMD, nur Turnierarten für die ein elektronisches Startbuch
 vorliegt, in der Übergangszeit ggf. komplett leer) [startbuch]
