@@ -17,7 +17,7 @@ Chairpersonen
 * Ergebnis: Eigenschaften Startgruppe, Startklasse und Wettbewerbsart
 für den Starter zur Prüfung von Ergebnissen, die nach Anhang 5 berechnet
 wurden.
-* Ergebnis: Header X-DTV-Pruefsumme entfernt und X-DTV-Endergebnis
+* Ergebnis: Header X-DTV-Pruefsumme entfernt und Flag endergebnis
 hinzugefügt.
 * Startliste: Flag für Startaufstellung in Startlisten (Gruppen und Formationen) ergänzt.
 * Ergebnis: Erweiterung Rundenablauf um Rundentyp Stichrunde (für Stich-
@@ -688,11 +688,11 @@ Die Ergebnisse eines Turniers können mehrfach hochgeladen werden, z.B.
 im Live-Modus nach jeder Runde. Dabei können sich auch die Inhalte des
 übergreifenden Berichtes verändern.
 
-Nach Turnierende muss der Header X-DTV-Endergebnis mit dem Wert true
-enthalten sein. Dies ist für das ESV-System das Signal, das die Daten
-komplett sind (Turnier beendet). Danach können die Ergebnisse noch
-weitere 4 Stunden für Korrekturen erneut hochgeladen werden. Nach 4
-Stunden lässt das ESV-System ein Hochladen nicht mehr zu.
+Erst nach Turnierende darf das Flag endergebnis im Ergebnisupload mit
+dem Wert true übermittelt werden. Dies ist für das ESV-System das
+Signal, das die Daten komplett sind (Turnier beendet). Danach können die
+Ergebnisse noch weitere 4 Stunden für Korrekturen erneut hochgeladen
+werden. Nach 4 Stunden lässt das ESV-System ein Hochladen nicht mehr zu.
 
 Das Hochladen von Zwischenergebnissen (auch nur der reinen Startliste)
 ist möglich. Solange das Turnier noch läuft sind Daten wie: Endzeit,
@@ -701,19 +701,15 @@ und Rundenablauf nur teilvollständig. Das Starter-Array muss trotzdem
 bei jedem Upload komplett (alle Starter inkl. abwesende) hochgeladen
 werden. Jeder Upload überschreibt immer den vorherigen komplett.
 
-Vor Turnierende darf der Header X-DTV-Endergebnis nur mit dem Wert false
-enthalten sein. Er kann jedoch auch komplett entfallen.
+Solange die Software-Token für den Schnittstellen-Level 1 noch aktiv
+sind, muss das ESV-System den alten Header X-DTV-Pruefsumme weiter als
+Flag für das Endergebnis interpretieren.
 
 ==== Aufruf
 
 * HTTP-Verb: POST
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
-* HTTP Header: Endergebnis (verpflichtende Verwendung anstelle der
-Prüfsumme ab Schnittstellen-Level 2)
-** Im Backend wird die Kompatibilität mit Schnittstellen-Level 1 dadurch
-gewährleistet, dass der Header X-DTV-Pruefsumme als X-DTV-Endergebnis:
-true interpretiert wird.
 * URL-Parameter: Turnier-ID
 
 [source]
@@ -721,7 +717,6 @@ true interpretiert wird.
 POST /api/v1/ergebnis/{turnierId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
-X-DTV-Endergebnis: true|false
 ----
 
 ==== Inhalt
@@ -730,6 +725,7 @@ X-DTV-Endergebnis: true|false
 
 * URI des verwendetes JSON-Schemas [$schema] (verpflichtend ab
 Schnittstellen-Level 2)
+* Flag Endergebnis (boolean) [endergebnis]
 * Tänze (Array, max. 10 Tänze) [taenze]
 ** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
 DF, SA,..)
