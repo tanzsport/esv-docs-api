@@ -31,6 +31,8 @@ Formationswettbewerben
 * Startliste: Klarstellung, dass Startbuchdaten für ausländische Starter
 nur über den Einzelabruf, jedoch nicht in der Startliste für die
 Veranstaltung und die Wettbewerbsart zurückgeliefert werden
+* Ergebnis: Startreihenfolge bei Gruppen- und Formationswettbewerben
+St/Lat/JMD sowie Einzelwettbewerben JMD im Rundenablauf ergänzt
 
 *19.05.2015 / Version 1.6.2*
 
@@ -728,7 +730,7 @@ Schnittstellen-Level 2)
 * Flag Endergebnis (boolean) [endergebnis]
 * Tänze (Array, max. 10 Tänze) [taenze]
 ** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
-DF, SA,..)
+DF, SA, ...)
 * WR (Array, WR des Turniers) [wr]
 ** Buchstaben-Kürzel [kuerzel] (verpflichtend ab Schnittstellen-Level 2)
 *** muss eindeutig für das Turnier sein
@@ -753,16 +755,16 @@ konfiguriert)
 * Beginnzeit (ISO8601) [beginn]
 * Endzeit (ISO8601) [ende]
 * Array Rundenablauf (NULL für Upload von nur-Startlisten) [ablauf]
-** Schlüsselwerte: 1,R,2,3,4,5,6,7,8,9,F,SR +
-(Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
-B-Finale=FB, Stichrunde bei Gruppen- und Formationswettbewerben: SR)
-[runde]
+** Schlüsselwerte: 1, R, 2, 3, 4, 5, 6, 7, 8, 9, F, SR +
+(Redance = R, bei 1.VR = 1A, bei 2.VR = 1B, bei Formations A-Finale =
+FA, bei B-Finale = FB, Stichrunde bei Gruppen- und
+Formationswettbewerben = SR) [runde]
 *** je Stichrunde um Platz X wird das Array um ein Element SR erweitert
 ** Wertungstyp [typ] +
-(Kreuze{0..1}=K, Mannschaftspunkte{1..1,5..2..2,5..3}=M,
-Finalplätze{1..x}=P, FormationswertungKreuze=FK,
-FormationswertungPlätze=FP, JMD-WertungenKreuze=JK,
-JMD-WertungenPlätze=JP, JudgingSystem2.x=JS)
+(Kreuze {0..1} = K, Mannschaftspunkte {1..1,5..2..2,5..3} = M,
+Finalplätze {1..x} = P, FormationswertungKreuze = FK,
+FormationswertungPlätze = FP, JMD-WertungenKreuze = JK,
+JMD-WertungenPlätze = JP, JudgingSystem2.x = JS)
 ** Platz [platz] (optional; verpflichtend bei Schnittstellen-Level 2) +
 (Platz für den die Stichrunde durchgeführt wurde; NULL für alle
 Rundentypen außer SR) – Achtung, es gibt „echte“ Stichrunden (mit
@@ -771,6 +773,10 @@ Platz 1 bei DM oder Plätze bei Regionalmeisterschaften) oder
 Relegationsrunden, bei denen das Gesamtergebnis des Turniers nicht
 verändert wird (Austanzen der Relegation zwischen 1. und 2. Bundesliga –
 nur JMD)
+** Array Startreihenfolge (optional; verpflichtend ab
+Schnittstellen-Level 2; nur Gruppen- und Formationswettbewerbe
+St/Lat/JMD sowie Einzelwettbewerbe JMD; Startnummern der Starter in
+Reihenfolge des Starts in der jeweiligen Runde) [startreihenfolge]
 * kombiniert mit Turnier-ID (optional) [kombiniertMit]
 * Zuschauerzahl [zuschauer]
 
