@@ -416,11 +416,12 @@ Turnier geladen werden – er wird im Status als solcher gekennzeichnet.
 
 *Starterweise [starter]*:
 
-* Starter-ID (übergreifende ID für tänzerische Einheit) [id]
-* Team (optional, nur bei Formations-, Small-Group- und
-Mannschaftswettbewerben) [team]
-** Team-Name (sofern vorhanden, z.B. bei Gruppen+Formationen) [name]
-** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen+Formationen)
+* Starter-ID (ID des Starters [Paar, Solist, Duo, Formation, Gruppe])
+[id]
+* Team (nur bei Formations-, Small-Group- und Mannschaftswettbewerben)
+[team]
+** Team-Name (sofern vorhanden, z.B. bei Gruppen und Formationen) [name]
+** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen und Formationen)
 [kapitaen]
 * Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
 Ersatztänzer) [personen]:
