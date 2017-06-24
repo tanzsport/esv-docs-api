@@ -426,11 +426,10 @@ Turnier geladen werden – er wird im Status als solcher gekennzeichnet.
 * Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
 Ersatztänzer) [personen]:
 ** Personen-ID (DTV-Nummer) [id]
-** Titel (nur bei Einzelaufruf Veranstaltung, sonst NULL) [titel]
-** Vorname (nur bei Einzelaufruf Veranstaltung, sonst NULL) [vorname]
-** Nachname (nur bei Einzelaufruf Veranstaltung, sonst NULL) [nachname]
-** Geschlecht (nur bei Einzelaufruf Veranstaltung, sonst NULL)
-[geschlecht]
+** Titel [titel]
+** Vorname [vorname]
+** Nachname [nachname]
+** Geschlecht [geschlecht]
 ** WDSF-MIN (optional, sofern vorhanden) [wdsfMin]
 ** Nationalität (3-Buchst.-Code) [nationalitaet]
 ** Flag Startaufstellung [startaufstellung] (relevant nur bei Gruppen-
