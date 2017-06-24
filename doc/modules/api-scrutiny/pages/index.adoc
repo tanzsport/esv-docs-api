@@ -33,6 +33,8 @@ nur über den Einzelabruf, jedoch nicht in der Startliste für die
 Veranstaltung und die Wettbewerbsart zurückgeliefert werden
 * Ergebnis: Startreihenfolge bei Gruppen- und Formationswettbewerben
 St/Lat/JMD sowie Einzelwettbewerben JMD im Rundenablauf ergänzt
+* Ergebnis: Klarstellung zur Reihenfolge der Starter in den
+Tabellen-Arrays
 
 *19.05.2015 / Version 1.6.2*
 
@@ -868,28 +870,31 @@ Struktur der Vorrundenwertung verwendet)
 
 *Einmal*:
 
-* Array Endrundentabelle (optional, nur bei Plätzewertungen P, FP, JP,
-Reihenfolge aus Rundenablauf, nur bei B/A-Finals relevant, vor
-Turnierende NULL) [endrundentabellen]
+* Array Endrundentabellen (nur bei Platzwertungen P, FP, JP in
+Reihenfolge aus Rundenablauf, vor Turnierende NULL) [endrundentabellen]
 ** Array Tänze
-*** Array über Endrundenstarter (Zeilen im heute gedruckten Dokument)
+*** Array über Endrundenstarter (in Reihenfolge der an der Runde
+teilnehmenden Starter aus dem Starter-Array; Zeilen im heute gedruckten
+Dokument)
 **** Array über Plätze (Spalten im heute gedruckten Dokument)
 ***** „Tabellenzelle“ (solange in Ausrechnung benötigt; NULL wenn
 Ausrechnung in früherer Spalte beendet)
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
-* Array Skatingtabelle (Reihenfolge aus Rundenablauf, nur bei B/A-Finals
-relevant, vor Turnierende leeres Array; sofern kein Skating in der Runde
-angewandt ist das jeweilige Element NULL) [skatingtabellen]
+* Array Skatingtabellen (nur bei Platzwertungen P in Reihenfolge aus
+Rundenablauf, vor Turnierende leeres Array; sofern kein Skating in der
+Runde angewandt ist das jeweilige Element NULL) [skatingtabellen]
 ** Skating Regel 10 [regel10]
-*** Array über Endrundenstarter
+*** Array über Endrundenstarter (in Reihenfolge der an der Runde
+teilnehmenden Starter aus dem Starter-Array)
 **** Array über Plätze
 ***** „Tabellenzelle“ (wenn in Ausrechnung benötigt, sonst NULL)
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 10 bestimmt, sonst NULL)
 ** Skating Regel 11 (optional) [regel11]
-*** Array über Endrundenstarter
+*** Array über Endrundenstarter (in Reihenfolge der an der Runde
+teilnehmenden Starter aus dem Starter-Array)
 **** Array über Plätze
 ***** „Tabellenzelle“ (wenn in Ausrechnung benötigt, sonst NULL)
 ****** Anzahl [anzahl]
