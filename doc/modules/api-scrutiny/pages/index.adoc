@@ -28,6 +28,9 @@ neues Feld für Stichrundentabellen
 * Startliste: Trainer bei Gruppen und Formationen gestrichen
 * Startliste: Restriktionen für die Aufstellung bei Gruppen- und
 Formationswettbewerben
+* Startliste: Klarstellung, dass Startbuchdaten für ausländische Starter
+nur über den Einzelabruf, jedoch nicht in der Startliste für die
+Veranstaltung und die Wettbewerbsart zurückgeliefert werden
 
 *19.05.2015 / Version 1.6.2*
 
@@ -465,35 +468,35 @@ getrennt
 ** Ausland (Maximalanzahl der Aktiven ausländischer Nationalität, die in
 einer Gruppe oder Formation tanzen dürfen) [ausland]
 *** NULL, wenn keine Restriktionen vorliegen
-* Array Startbuch turnierartweise (optional, nur Einzelwettbewerbe
-St/Lat und JMD, nur Turnierarten für die ein elektronisches Startbuch
-vorliegt, in der Übergangszeit ggf. komplett leer) [startbuch]
+* Array Startbuch turnierartweise (leer für alle ausländischen Starter
+in der Startliste für die Veranstaltung und die Wettbewerbsart, gefüllt
+soweit vorhanden bei Einzelabruf der Starterdaten [s.
+Schnittstellendokumentation für externe Systeme]) [startbuch]
 ** Turnierart [turnierart]
 ** Startgruppe [startgruppe]
-** Ist-Startliga (optional, nur Formationswettbewerbe St/Lat und JMD)
-[startliga]
-** Ist-Startklasse (z.B. BSW, D, C,B,A,S,PD) (optional, nur bei
-Einzelwettbewerben St/Lat und JMD) [startklasse]
-** Ziel-Startklasse (C,B,…, NULL für BSW/S/PD/ausländische-Paare/alle
-Doppelstartpaare, die nicht weiter aufsteigen können, d.h. „kein
-Aufstieg möglich bei diesem Turnier für dieses Paar“; optional, nur bei
-Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
-[naechsteStartklasse]
-** Punkte (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
-Einzelwettbewerbe JMD) [punkte]
+** Ist-Startliga (nur Formationswettbewerbe St/Lat und JMD) [startliga]
+** Ist-Startklasse (z.B. BSW, D, C, B, A, S, PD) (nur Einzelwettbewerbe
+St/Lat und JMD) [startklasse]
+** Ziel-Startklasse (z.B. C, B; NULL für
+BSW/S/PD/ausländische-Paare/alle Doppelstartpaare, die nicht weiter
+aufsteigen können, d.h. „kein Aufstieg möglich bei diesem Turnier für
+dieses Paar“; nur Einzelwettbewerbe St/Lat, ggf. später
+Einzelwettbewerbe JMD) [naechsteStartklasse]
+** Punkte (nur Einzelwettbewerbe St/Lat, ggf. später Einzelwettbewerbe
+JMD) [punkte]
 *** Ist [ist]
 *** Ziel [ziel]
-** Platzierungen (optional, nur bei Einzelwettbewerben St/Lat, ggf.
-später Einzelwettbewerbe JMD) [platzierungen]
+** Platzierungen (nur bei Einzelwettbewerben St/Lat, ggf. später
+Einzelwettbewerbe JMD) [platzierungen]
 *** Ist [ist]
 *** Ziel [ziel]
-** Regeln (optional, nur bei Einzelwettbewerben St/Lat, ggf. später
-Einzelwettbewerbe JMD) [regeln]
+** Regeln (nur Einzelwettbewerbe St/Lat, ggf. später Einzelwettbewerbe
+JMD) [regeln]
 *** Mindestpunkte [minPunkte]
 *** Platzierung bis Platz (einschließlich) [platzierungBis]
 ** Flags [flags]
-*** Laufzetteldruck da Aufstiegschance am Wochenende (optional, nur bei
-Einzelwettbewerben St/Lat, ggf. später Einzelwettbewerbe JMD)
+*** Laufzetteldruck da Aufstiegschance am Wochenende (nur
+Einzelwettbewerbe St/Lat, ggf. später Einzelwettbewerbe JMD)
 [laufzettel]
 *** Verwarnt wg. Figurenbegrenzung (nur Einzelwettbewerbe St/Lat)
 [verwarnungSchrittbegrenzung]
