@@ -462,7 +462,7 @@ sein wie JMD und Formation) [startNr]
 ** Minimal-Anzahl Aktive (Anzahl der Aktiven, die in einer Gruppe oder
 Formation mindestens tanzen müssen) [min]
 *** gilt bei JMD und Jazz für alle Aktiven
-*** gilt bei Formationen Standard/Latein jeweils für Herrren und Damen
+*** gilt bei Formationen Standard/Latein jeweils für Herren und Damen
 getrennt
 ** Maximal-Anzahl Aktive (Anzahl der Aktiven, die in einer Gruppe oder
 Formation maxmimal tanzen dürfen) [max]
@@ -472,6 +472,8 @@ getrennt
 ** Ausland (Maximalanzahl der Aktiven ausländischer Nationalität, die in
 einer Gruppe oder Formation tanzen dürfen) [ausland]
 *** NULL, wenn keine Restriktionen vorliegen
+*** Alle Personen einer Gruppe oder Formation mit Nationalität ungleich
+GER sind ausländischer Nationalität.
 * Array Startbuch turnierartweise (leer für alle ausländischen Starter
 in der Startliste für die Veranstaltung und die Wettbewerbsart, gefüllt
 soweit vorhanden bei Einzelabruf der Starterdaten [s.
