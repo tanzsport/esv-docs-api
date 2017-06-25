@@ -35,6 +35,7 @@ Veranstaltung und die Wettbewerbsart zurückgeliefert werden
 St/Lat/JMD sowie Einzelwettbewerben JMD im Rundenablauf ergänzt
 * Ergebnis: Klarstellung zur Reihenfolge der Starter in den
 Tabellen-Arrays
+* Klarstellung zu optionalen JSON-Eigenschaften
 
 *19.05.2015 / Version 1.6.2*
 
@@ -176,9 +177,10 @@ Einzelschnittstelle muss hinterlegt werden, ob mit dem jeweiligen
 Schlüssel lesend, schreibend oder gar nicht auf die jeweils angefragte
 Schnittstelle zugegriffen werden kann.
 * Optionale Datenfelder +
-Diese Felder sind grundsätzlich immer im Datensatz vorhanden, ggf.
-werden sie mit NULL gefüllt.
-* Staaten +
+Optionale Datenfelder, die z.B. nur bei einzelnen Wettbewerbsarten
+verwendet werden, müssen trotzdem im JSON-Objekt deklariert werden.
+Einfache JSON-Datentypen und Objekte werden dann mit NULL belegt, Arrays
+werden als leeres Array deklariert.
 in 3-Buchstaben-Olympiccode, bei den Staaten ohne solchen: ISO-3-Code
 * User und Passwort +
 Als User und Passwort werden die Vereinsportal-Zugangsdaten verwendet
