@@ -6,7 +6,8 @@
 
 *xx.xx.xxxx / Version 2.0.0*
 
-* Hinweise zu Schnittstellen-Level 2 und JSON-Schemata
+* Hinweise zu Content-Negotiation, Schnittstellen-Level 2 und
+JSON-Schemas
 * Funktionäre/Lizenzträger (Einzelaufruf und Gesamtliste): das Jahr als
 optionalen URL-Parameter zugefügt
 * Funktionäre/Lizenzträger (Gesamtliste): Gesamtliste liefert auch Namen
@@ -24,6 +25,7 @@ hinzugefügt.
 und Relegationsrunden bei Gruppen- oder Formationswettbewerben) sowie
 neues Feld für Stichrundentabellen
 * Startliste Wettbewerbsart: Enthält jetzt immer alle Namen.
+* Schlüsselverzeichnis: neue Turnierformen RT und AT
 * Schlüsselverzeichnis: neue Turnierart Jazz
 * Startliste: Trainer bei Gruppen und Formationen gestrichen
 * Startliste: Restriktionen für die Aufstellung bei Gruppen- und
@@ -36,6 +38,12 @@ St/Lat/JMD sowie Einzelwettbewerben JMD im Rundenablauf ergänzt
 * Ergebnis: Klarstellung zur Reihenfolge der Starter in den
 Tabellen-Arrays
 * Klarstellung zu optionalen JSON-Eigenschaften
+* Korrektur der Schnittstellenbeschreibung Feld „bemerkung“ im
+Einzelaufruf Veranstaltung
+* Startbuch immer gefüllt ab Schnittstellen-Level 2 auch bei
+ausländischen Startern
+* Feld Wettbewerbsart im Startbuch des Starters ergänzt.
+* Moderatoren und Protokollführer ergänzt.
 
 *19.05.2015 / Version 1.6.2*
 
@@ -215,37 +223,35 @@ dargestellt.
 * Alle JSON-Schnittstellen sollen transparente HTTP-Komprimierung
 unterstützten (gzip, deflate via Accept-Encoding und Content-Encoding)
 
-===  Schnittstellen-Level
+===  Content Negiotation und Schnittstellen-Level
 
-* Mit Version 2.0.0 wird für alle beschreibbaren Endpunkte ein
-Schnittstellen-Level eingeführt. Da es sich nur um abwärtskompatible
-Änderungen der Struktur handelt, die jedoch hohe inhaltliche Relevanz
-haben, gibt es keine neue Endpunkt-URL.
+* Mit Version 2.0.0 wird für alle Endpunkte ein Schnittstellen-Level
+eingeführt. Da es sich nur um abwärtskompatible Ergänzungen der Struktur
+handelt, die jedoch hohe inhaltliche Relevanz haben, gibt es keine neue
+Endpunkt-URL.
 * Für alle Endpunkte gibt es ab Version 2.0.0 ein JSON-Schema
 (json-schema.org, draft-06), das eine grundsätzliche Validierung der
-JSON-Daten ermöglicht.
-* Sofern es sich um beschreibbare Endpunkte handelt, muss der durch das
-Turnierprogramm verwendete Schnittstellen-Level durch die Angabe der URI
-des verwendeten JSON-Schemas (korrespondierend mit dem
-Schnittstellen-Level) über die Eigenschaft $schema des JSON-Dokuments
-erfolgen, sofern ein Schnittstellen-Level > 1 verwendet wird.
-* Die Schema-Dateien können über die jeweilige Schema-URI bezogen
-werden.
-* Unter https://github.com/tanzsport/esv-json-schema kann ein
-GIT-Repository der Schema-Dateien inkl. Kompatibilitäts-Tester
-(basierend auf NodeJS) bezogen werden.
-* Die für die jeweiligen Endpunkte gültigen Level-Schemas sind der
-folgenden Tabelle zu entnehmen.
-
-[cols=",,",options="header",]
-|===
-|*Endpunkt* |*Level* |*Schema-URI*
-|Ergebnisse |2
-|http://schema.tanzsport.de/json/esv/v1/ergebnis-level2.json
-
-|WR-Zettel (digital) |2
-|http://schema.tanzsport.de/json/esv/v1/wrzetteldigi-level2.json
-|===
+JSON-Daten ermöglicht. Die Schema-Definitionen sind unter
+https://tanzsport.github.io/esv-json-schema einsehbar. Dort kann auch
+eine Online-Validierung erfolgen.
+* Der Schnittstellen-Level wird über Content Negotiation gesteuert.
+** Bei Lesezugriffen ab Schnittstellen-Level 2 (und ggf. weitere) ist
+die Angabe eines erwarteten Media Types der Response über den
+Accept-Header des HTTP Requests zwingend erforderlich.
+** Bei Schreibzugriffen ab Schnittstellen-Level 2 (und ggf. weitere) ist
+die Angabe eines Media Types des Requests über den Content-Type des HTTP
+Requests zwingend erforderlich.
+* Für den Schnittstellen-Level 1 ist die Verwendung des Accept- bzw.
+Content-Type-Headers nicht erforderlich, um die Kompatibilität mit
+bestehenden Programmversionen zu gewährleisten.
+* Alle neuen Versionen der Turnierprogramme müssen auf sämtlichen
+Endpunkten auf die neuen Media Types umgestellt werden, und zwar auch
+dann, wenn keine strukturellen Änderungen am Endpunkt erfolgt sind: Wenn
+die Unterstützung für den Schnittstellen-Level 1 endet, bleiben so alle
+Endpunkte in neueren Versionen funktionsfähig.
+* Die ESV wird auf für Responses auf Schnittstellen-Level 2 die
+entsprechenden Media Types für die Response als Content-Type Header
+verwenden.
 
 == Schnittstellen
 
@@ -263,12 +269,22 @@ Werte zurückgegeben als für die Turnierprogramme benötigt.
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.veranstaltungsliste.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.veranstaltungsliste.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/veranstaltungsliste.json
 
 [source]
 ----
 GET /api/v1/veranstaltungen HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ===== Rückgabe
@@ -282,6 +298,9 @@ Berechtigung hat)
 ** Ort [ort]
 ** Titel (optional) [titel]
 
+*Hinweis:* Veranstaltungen mit Formations- oder JMD-Turnieren können nur
+über den Schnittstellen-Level 2 abgefragt werden.
+
 ==== Einzelaufruf
 
 ===== Aufruf
@@ -290,12 +309,22 @@ Berechtigung hat)
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Veranstaltungs-ID
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.veranstaltung.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.veranstaltung.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/veranstaltung.json
 
 [source]
 ----
 GET /api/v1/turniere/{veranstaltungsId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ===== Rückgabe
@@ -324,7 +353,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 *** Kontakt Telefon [kontaktTelefon]
 *** Kontakt E-Mail [kontaktEmail]
 ** Titel (optional) [titel]
-** Bemerkungen (Freitext, optional) [bemerkungen]
+** Bemerkungen (Freitext, optional) [bemerkung] (Hinweis: Implementiert
+von Beginn als Feld bemerkung – Korrektur in der Dokumentation ab
+Version 2.0.0)
 ** Array Wertungsrichter (optional) [wertungsrichter]
 *** Inhalte wie bei Einzelaufruf Funktionäre (siehe unten)
 ** Array Funktionäre (TL, BS, CHM, optional) [funktionaere]
@@ -380,6 +411,9 @@ oder mehrere LTV;) [zulassung]
 ** Beisitzer Personen-ID (optional) [beisitzer]
 ** Chairman Personen-ID (optional) [chairman]
 
+*Hinweis:* Veranstaltungen mit Formations- oder JMD-Turnieren können nur
+über den Schnittstellen-Level 2 abgefragt werden.
+
 === Startlisten (lesend)
 
 Startlisten können für eine spezifische Veranstaltung oder als
@@ -396,12 +430,25 @@ Datenschutzgründen keine Namen der Personen (Feldwerte [titel],
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Veranstaltungs-ID (ggf. optional)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.startliste.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.startliste.l2+json
+* Schema-URI
+** Level 1
+*** http://schema.tanzsport.de/json/esv/v1/startliste-level1.json
+** Level 2
+*** http://schema.tanzsport.de/json/esv/v1/startliste-level2.json
 
 [source]
 ----
 GET /api/v1/startliste/veranstaltung/{veranstaltungsId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Rückgabe
@@ -429,6 +476,10 @@ Turnier geladen werden – er wird im Status als solcher gekennzeichnet.
 ** Team-Name (sofern vorhanden, z.B. bei Gruppen und Formationen) [name]
 ** Team-Kapitän (sofern vorhanden, z.B. bei Gruppen und Formationen)
 [kapitaen]
+** Trainer (sofern vorhanden, z.B. bei Gruppen und Formationen)
+[trainer] – ab Level 2
+** Musiktitel (Bezeichnung der Choreographie/Titel des Tanzes)
+[musikTitel] – ab Level 2
 * Personen (Array, enthält bei Teamwettbewerben alle Tänzer inkl.
 Ersatztänzer) [personen]:
 ** Personen-ID (DTV-Nummer) [id]
@@ -439,7 +490,7 @@ Ersatztänzer) [personen]:
 ** WDSF-MIN (optional, sofern vorhanden) [wdsfMin]
 ** Nationalität (3-Buchst.-Code) [nationalitaet]
 ** Flag Startaufstellung [startaufstellung] (relevant nur bei Gruppen-
-und Formationen)
+und Formationen) – ab Level 2
 *** alle mit true markierten Personen wurden vom Verein für die
 Startaufstellung benannt, so dass angenommen werden kann, dass diese
 tatsächlich zum Einsatz kommen
@@ -460,7 +511,7 @@ Wettbewerbsart) [meldungen]
 sein wie JMD und Formation) [startNr]
 ** Flag Startsperre (true/false) [startsperre]
 * Aufstellung (optional, nur Gruppen- und Formationswettbewerbe)
-[aufstellung]
+[aufstellung] – ab Level 2
 ** Minimal-Anzahl Aktive (Anzahl der Aktiven, die in einer Gruppe oder
 Formation mindestens tanzen müssen) [min]
 *** gilt bei JMD und Jazz für alle Aktiven (n Aktive)
@@ -476,10 +527,12 @@ einer Gruppe oder Formation tanzen dürfen) [ausland]
 *** NULL, wenn keine Restriktionen vorliegen
 *** Alle Personen einer Gruppe oder Formation mit Nationalität ungleich
 GER sind ausländischer Nationalität
-* Array Startbuch turnierartweise (leer für alle ausländischen Starter
-in der Startliste für die Veranstaltung und die Wettbewerbsart, gefüllt
-soweit vorhanden bei Einzelabruf der Starterdaten [s.
-Schnittstellendokumentation für externe Systeme]) [startbuch]
+* Array Startbuch (Level 1: leer für alle ausländischen Starter in der
+Startliste für die Veranstaltung und die Wettbewerbsart, gefüllt soweit
+vorhanden bei Einzelabruf der Starterdaten [s.
+Schnittstellendokumentation für externe Systeme]; Level 2: *immer*
+gefüllt für alle Starter) [startbuch]
+** Wettbewerbsart [wettbewerbsart]
 ** Turnierart [turnierart]
 ** Startgruppe [startgruppe]
 ** Ist-Startliga (nur Formationswettbewerbe St/Lat und JMD) [startliga]
@@ -523,6 +576,7 @@ Einzelwettbewerbe St/Lat, ggf. später Einzelwettbewerbe JMD)
 GET /api/v1/startliste/wettbewerbsart/{wettbewerbsart} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ===== Rückgabe
@@ -530,6 +584,9 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 Wie Startliste für Veranstaltung. Das Feld [startmeldungen] je Starter
 ist ein leeres Array. Die globalen Felder [status] und [nachmeldungen]
 sind NULL bzw. leer.
+
+*Hinweis:* Startlisten für Gruppen- und Formationen können nur über
+Schnittstellen-Level bezogen werden.
 
 === Ranglisten (lesend)
 
@@ -541,6 +598,15 @@ sind NULL bzw. leer.
 * URL-Parameter: RL-ID (Mehrfachnennung mit versch. IDs möglich)
 * URL-Parameter: Stichtag (ttmmjjjj, optional, ohne Angabe letzter
 Stand)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.ranglisten.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.ranglisten.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/ranglisten.json
 
 *Ohne Stichtag*:
 [source]
@@ -548,6 +614,7 @@ Stand)
 GET /api/v1/ranglisten/{ranglistenId1},{ranglistenId2},... HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 *Mit Stichtag*:
@@ -556,6 +623,7 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 GET /api/v1/ranglisten/{stichtag}/{ranglistenId1},{ranglistenId2},... HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Rückgabe
@@ -599,12 +667,22 @@ werden. Danach muss sie ggf. erneut heruntergeladen werden.
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Personen-ID
 * URL-Parameter: Jahr (JJJJ, optional, Standard ist das aktuelle Jahr)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.funktionaer.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.funktionaer.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/funktionaer.json
 
 [source]
 ----
 GET /api/v1/funktionaer/{personenId}/{jahr} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ===== Rückgabe
@@ -633,12 +711,22 @@ User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Jahr (JJJJ, optional, Standard ist das aktuelle Jahr)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.funktionaere.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.funktionaere.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/funktionaere.json
 
 [source]
 ----
 GET /api/v1/funktionaere/{jahr} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ===== Rückgabe
@@ -660,12 +748,22 @@ Umwandlung in ein vollwertiges Startbuch vollzogen werden kann.
 * HTTP-Verb: GET
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.aufstiegstabellen.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.aufstiegstabellen.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/aufstiegstabellen.json
 
 [source]
 ----
 GET /api/v1/aufstiegstabelle/{wettbewerbsart}/{jahr} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Accept: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Rückgabe
@@ -685,8 +783,6 @@ Aufstieg ermöglichen wird NULL zurückgeliefert (z.B. BSW)
 **** Punkte (erforderliche Punkte für Aufstieg) [punkte]
 **** Plätze (erforderliche Plätze für Aufstieg) [plaetze]
 **** Platzierung Bis Platz [bisPlatz]
-**** Doppelstart: true/false, kennzeichnet Aufstiege in Startklassen,
-die nur im Doppelstart genutzt werden können [doppelstart]
 **** Doppelstart: true/false, kennzeichnet Aufstiege in Startklassen,
 die nur im Doppelstart genutzt werden können [doppelstart]
 
@@ -719,26 +815,37 @@ Flag für das Endergebnis interpretieren.
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Turnier-ID
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.ergebnis.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.ergebnis.l2+json
+* Schema-URI
+** Level 1
+*** http://schema.tanzsport.de/json/esv/v1/ergebnis-level1.json
+** Level 2
+*** http://schema.tanzsport.de/json/esv/v1/ergebnis-level2.json
 
 [source]
 ----
 POST /api/v1/ergebnis/{turnierId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Content-Type: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Inhalt
 
 *Übergreifend Bericht*:
 
-* URI des verwendetes JSON-Schemas [$schema] (verpflichtend ab
-Schnittstellen-Level 2)
-* Flag Endergebnis (boolean) [endergebnis]
+* Flag Endergebnis (boolean) [endergebnis] – ab Level 2
 * Tänze (Array, max. 10 Tänze) [taenze]
 ** gültige Werte: LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD,
 DF, SA, ...)
 * WR (Array, WR des Turniers) [wr]
-** Buchstaben-Kürzel [kuerzel] (verpflichtend ab Schnittstellen-Level 2)
+** Buchstaben-Kürzel [kuerzel] – ab Level 2
 *** muss eindeutig für das Turnier sein
 *** max. drei alphanumerische Zeichen
 ** Personen-ID (für DTV-WR Pflicht, für Ersatz-WR optional, für
@@ -752,11 +859,18 @@ Ausländer NULL) [id]
 * Turnierleiter (Array, min. 1 Element) [tl]
 ** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
 konfiguriert)
+** In der ESV wird nur der erste Eintrag verarbeitet.
 * Beisitzer (Array, min. 1 Element) [bs]
 ** Analog WR-Einzelement (ID Pflicht, Ausnahmen auf Veranstaltungsebene
 konfiguriert)
+** In der ESV wird nur der erste Eintrag verarbeitet.
 * Chairman (optional) (Array) [ch]
 ** Analog WR-Einzelement
+** In der ESV wird nur der erste Eintrag verarbeitet
+* Moderatoren (optional) (Array) [moderatoren]
+** Analog WR-Einzelelement; ID-Angabe ist nicht verpflichtend.
+* Protokollführer (optional) (Array) [protokoll]
+** Analog WR-Einzelelement; ID-Angabe ist nicht verpflichtend.
 * Vorkommnisse (optional) [vorkommnisse]
 * Beginnzeit (ISO8601) [beginn]
 * Endzeit (ISO8601) [ende]
@@ -771,7 +885,7 @@ Formationswettbewerben = SR) [runde]
 Finalplätze {1..x} = P, FormationswertungKreuze = FK,
 FormationswertungPlätze = FP, JMD-WertungenKreuze = JK,
 JMD-WertungenPlätze = JP, JudgingSystem2.x = JS)
-** Platz [platz] (optional; verpflichtend bei Schnittstellen-Level 2) +
+** Platz [platz] – ab Level 2 +
 (Platz für den die Stichrunde durchgeführt wurde; NULL für alle
 Rundentypen außer SR) – Achtung, es gibt „echte“ Stichrunden (mit
 Auswirkungen auf das Gesamtergebnis des Turniers z.B. Stichrunden um
@@ -779,10 +893,10 @@ Platz 1 bei DM oder Plätze bei Regionalmeisterschaften) oder
 Relegationsrunden, bei denen das Gesamtergebnis des Turniers nicht
 verändert wird (Austanzen der Relegation zwischen 1. und 2. Bundesliga –
 nur JMD)
-** Array Startreihenfolge (optional; verpflichtend ab
-Schnittstellen-Level 2; nur Gruppen- und Formationswettbewerbe
+** Array Startreihenfolge (nur Gruppen- und Formationswettbewerbe
 St/Lat/JMD sowie Einzelwettbewerbe JMD; Startnummern der Starter in
-Reihenfolge des Starts in der jeweiligen Runde) [startreihenfolge]
+Reihenfolge des Starts in der jeweiligen Runde) [startreihenfolge] – ab
+Level 2
 * kombiniert mit Turnier-ID (optional) [kombiniertMit]
 * Zuschauerzahl [zuschauer]
 
@@ -809,24 +923,16 @@ WDSF-Paaren optional) [id]
 * Meldungstyp (regulär = 1, Nachmeldung = 2, Nachmeldung, Sieger = 3,
 Nachmeldung, Aufsteiger = 4) [meldungsTyp]
 * Anzahl Sterne (gesetzte Paare) [sterne]
-* Startgruppe [startgruppe] (verpflichtend ab Schnittstellen-Level 2;
-gem. Schlüsselverzeichnis)
+* Startgruppe (gem. Schlüsselverzeichnis) [startgruppe] – ab Level 2
 ** Hier muss die in der Startliste angegebene Startgruppe angegeben
 werden.
-** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
-wurden.
-* Startklasse [startklasse] (verpflichtend ab Schnittstellen-Level 2;
-gem. Schlüsselverzeichnis)
+* Startklasse (gem. Schlüsselverzeichnis) [startklasse] – ab Level 2
 ** Hier muss die zum Zeitpunkt des Turniers gültige Startklasse des
 Starters angegeben werden.
-** Dient der Prüfung von Ergebnissen, die nach Anhang 5 berechnet
-wurden.
-* Wettbewerbsart [wettbewerbsart] (verpflichtend ab Schnittstellen-Level
-2; gem. Schlüsselverzeichnis)
-** Hier muss die ursprüngliche Wettbewerbsart des Turniers angegeben
-werden, für das der Starter gemeldet war.
-** Dient der Prüfung von Ergebnissen bei gemeinsam durchgeführten
-Turnieren der Wettbewerbsarten SoloMaennlich und SoloWeiblich.
+* Wettbewerbsart (gem. Schlüsselverzeichnis) [wettbewerbsart] – ab Level
+2
+** Hier muss die in der Startliste angegebene Wettbewerbsart angegeben
+werden.
 * Ergebnis (NULL bei Status 2 oder 3 oder beim Upload von
 nur-Startliste) [ergebnis]
 ** Platz-Gesamtergebnis Von [platzGesamtVon]
@@ -904,10 +1010,10 @@ teilnehmenden Starter aus dem Starter-Array)
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 11 bestimmt, sonst NULL)
-* Array Stichrundetabellen (verpflichtend ab Schnittstellen-Level 2;
-Reihenfolge aus Rundenablauf bezogen nur auf die Stichrunden, d.h. die
-erste Stichrunde hat Index 0; wenn keine Stichrunden durchgeführt wurden
-NULL) [stichrundentabellen]
+* Array Stichrundetabellen (ab Schnittstellen-Level 2; Reihenfolge aus
+Rundenablauf bezogen nur auf die Stichrunden, d.h. die erste Stichrunde
+hat Index 0; wenn keine Stichrunden durchgeführt wurden NULL)
+[stichrundentabellen]
 ** Struktur der Einzelelemente wie bei Endrundentabellen
 
 Bei Startern eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
@@ -930,12 +1036,22 @@ auch ein Upload von „echten“ Ergebnissen ersatzweise möglich sein.
 * HTTP Header: User + Passwort (Basic Authentication)
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Turnier-ID
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.turnierausfall.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.turnierausfall.l2+json
+* Schema-URI
+** http://schema.tanzsport.de/json/esv/v1/turnierausfall.json
 
 [source]
 ----
 POST /api/v1/ausgefallen/{turnierId} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Content-Type: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Inhalt
@@ -958,6 +1074,8 @@ PDF-Dateien hochgeladen werden.
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * Content-Type: multipart/form-data
 * URL-Parameter: Turnier-ID
+* Media-Types
+** keine
 
 [source]
 ----
@@ -1000,12 +1118,25 @@ zulässig, wenn tatsächlich digitale Wertungsgeräte zum Einsatz kommen.
 * HTTP Header: User-Agent (Software inkl. Version + Kennschlüssel)
 * URL-Parameter: Turnier-ID
 * URL-Parameter: Runde
+* Media Types
+** Level 1
+*** \*/*
+*** application/json
+*** application/vnd.tanzsport.esv.v1.wrzettel.l1+json
+** Level 2
+*** application/vnd.tanzsport.esv.v1.wrzettel.l2+json
+* Schema-URI
+** Level 1
+*** http://schema.tanzsport.de/json/esv/v1/wrzettel-level1.json
+** Level 2
+*** http://schema.tanzsport.de/json/esv/v1/wrzettel-level2.json
 
 [source]
 ----
 POST /api/v1/wrzetteldigi/{turnierId}/{runde} HTTP/1.1
 Authorization: Basic dXNlcjpwYXNzd29yZA==
 User-Agent: Software/1.0; Token=abcdefghijklmnopqrstuvwxyz
+Content-Type: <gem. Schnittstellen-Level oder leer>
 ----
 
 ==== Inhalt
@@ -1014,12 +1145,10 @@ Bei Formations/JMD-Wertungen läuft das Wertungsarray immer über 5/4
 virtuelle Tänze +
 (Tanz 1-4/3: Wertungsgebiete Punkte 0-10, Tanz 5/4: Kreuz oder Platz).
 
-* URI des verwendeten JSON-Schemas [$schema] (verpflichtend ab
-Schnittstellen-Level 2)
 * Array über alle WR (in der Reihenfolge wie im Ergebnisupload; das
 Element ist NULL, wenn die Wertungen nicht vollständig digital erfasst
 wurden, z.B. wenn teilweise oder vollständig auf Papier gewertet wurde)
-** Wertungsrichter [wr]
+** Wertungsrichter [wr] – ab Level 2
 *** Personen-ID [id]
 *** Vorname [vorname]
 *** Nachname [nachname]
@@ -1062,7 +1191,9 @@ RSRLT (Rising Star Rangliste), GM (Gebietsmeisterschaft), LM
 (Int. Einladungsturnier), IM (Int. Meisterschaft), IT (Int. Turnier),
 PDT (PD Trophy), LT (Ligaturnier), IMK (Int. Länderkampf Mannschaft), MK
 (Mannschaftskampf), +
-RM (Regionalmeisterschaft JMD)
+RM (Regionalmeisterschaft JMD), RT (Relegationsturnier; nur-technische
+Turnierform für Relegationsturniere), AT (Aufstiegsturnier;
+nur-technische Turnierform für Aufstiegsturniere)
 
 ==== Startgruppen
 
