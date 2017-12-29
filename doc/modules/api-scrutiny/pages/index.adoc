@@ -38,12 +38,21 @@ St/Lat/JMD sowie Einzelwettbewerben JMD im Rundenablauf ergänzt
 * Ergebnis: Klarstellung zur Reihenfolge der Starter in den
 Tabellen-Arrays
 * Klarstellung zu optionalen JSON-Eigenschaften
-* Korrektur der Schnittstellenbeschreibung Feld „bemerkung“ im
-Einzelaufruf Veranstaltung
-* Startbuch immer gefüllt ab Schnittstellen-Level 2 auch bei
+* Veranstaltung: Korrektur der Schnittstellenbeschreibung Feld
+„bemerkung“
+* Startliste: Startbuch immer gefüllt ab Schnittstellen-Level 2 auch bei
 ausländischen Startern
-* Feld Wettbewerbsart im Startbuch des Starters ergänzt.
-* Moderatoren und Protokollführer ergänzt.
+* Startliste: Feld Wettbewerbsart im Startbuch des Starters ergänzt
+* Ergebnis: Moderatoren und Protokollführer ergänzt
+* Schlüsselverzeichnis: Korrektur RSRLT in RS
+* Neuer Response Code 406
+* Schlüsselverzeichnis: neuer Tanz JAZZ
+* Klarstellung, das JS-Score für alle Varianten des Judging Systems
+inkl. AJS gilt
+* Ergebnis: Kreuzvorgabe im Rundenablauf
+* Ergebnis: Klarstellung, welche Startgruppe für den Starter angegeben
+werden soll
+* Ergebnis: Property„vd“ eines Starters ist kein Flag
 
 *19.05.2015 / Version 1.6.2*
 
