@@ -884,7 +884,7 @@ Formationswettbewerben = SR) [runde]
 (Kreuze {0..1} = K, Mannschaftspunkte {1..1,5..2..2,5..3} = M,
 Finalplätze {1..x} = P, FormationswertungKreuze = FK,
 FormationswertungPlätze = FP, JMD-WertungenKreuze = JK,
-JMD-WertungenPlätze = JP, JudgingSystem2.x = JS)
+JMD-WertungenPlätze = JP, JudgingSystem alle Versionen inkl. AJS = JS)
 ** Platz [platz] – ab Level 2 +
 (Platz für den die Stichrunde durchgeführt wurde; NULL für alle
 Rundentypen außer SR) – Achtung, es gibt „echte“ Stichrunden (mit
@@ -969,7 +969,7 @@ Stichrunden teilgenommen haben, gelten als ausgeschieden) [wertung]
 getanzte Tänze der Runde ebenfalls NULL)
 ***** Tänze+1: Float Summe +
 *** Summe Wertungen über alle Tänze und alle WR
-** JudgingSystem2.x: Summe Float
+** JudgingSystem alle Versionen inkl. AJS: Summe Float
 ** Endrundenwertung (nur Final-Platz-Wertungen, bei Mannschaft wird
 Struktur der Vorrundenwertung verwendet)
 *** Array Tänze
@@ -1257,7 +1257,7 @@ K (Kreuze), M (Mannschaftspunkte{1..1,5..2..2,5..3}), P
 (Finalplätze{1..x}), +
 FK (FormationswertungKreuze), FP (FormationswertungPlätze), JK
 (JMD-WertungenKreuze), +
-JP (JMD-WertungenPlätze), JS (JudgingSystem)
+JP (JMD-WertungenPlätze), JS (JudgingSystem alle Versionen inkl. AJS)
 
 === Ergebniscodes
 
