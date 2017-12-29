@@ -1242,7 +1242,8 @@ WR-J1, WR-J2, WR-J1-DM, WR-J2-DM
 
 ==== Tänze
 
-LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, DF, SA (Salsa)
+LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, JAZZ, DF, SA
+(Salsa)
 
 ==== Runden
 
@@ -1256,7 +1257,7 @@ K (Kreuze), M (Mannschaftspunkte{1..1,5..2..2,5..3}), P
 (Finalplätze{1..x}), +
 FK (FormationswertungKreuze), FP (FormationswertungPlätze), JK
 (JMD-WertungenKreuze), +
-JP (JMD-WertungenPlätze), JS (JudgingSystem2.x)
+JP (JMD-WertungenPlätze), JS (JudgingSystem)
 
 === Ergebniscodes
 
