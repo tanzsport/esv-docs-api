@@ -897,6 +897,10 @@ nur JMD)
 St/Lat/JMD sowie Einzelwettbewerbe JMD; Startnummern der Starter in
 Reihenfolge des Starts in der jeweiligen Runde) [startreihenfolge] – ab
 Level 2
+** Kreuzvorgabe bei Wertungstypen K, FK, JK (sonst NULL) [kreuzvorgabe]
+– ab Level 2
+*** Kreuzvorgabe von (Ganzzahl) [von]
+*** Kreuzvorgabe bis (Ganzzahl) [bis]
 * kombiniert mit Turnier-ID (optional) [kombiniertMit]
 * Zuschauerzahl [zuschauer]
 
