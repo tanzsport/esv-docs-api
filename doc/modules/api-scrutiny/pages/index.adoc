@@ -955,7 +955,7 @@ Abweichung) [platzierungenGesamt]
 ** Aufstieg (0 = nein, 1 = ja, 2 = ja, durch Beschluss) [aufstieg]
 ** Flag Laufzettel (Starter hat manuell bearbeitete Aufstiegdaten)
 [laufzettel]
-** Flag Verwarnung/Disqualifikation (0 = keine, 1 = Verwarnt
+** Verwarnung/Disqualifikation (0 = keine, 1 = Verwarnt
 Schrittbegrenzung, 2 = Disqualifiziert Schrittbegrenzung, 3 =
 gewöhnliche Disqualifikation) [vd] +
 Das Verwarnungsflag darf nur >0 gesetzt werden, wenn die Verwarnung oder
