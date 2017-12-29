@@ -1264,6 +1264,7 @@ JP (JMD-WertungenPlätze), JS (JudgingSystem2.x)
 * 403 Login inkorrekt
 * 400 Datenkonstrukt ungültig (Bad request)
 * 404 Ressource existiert nicht (Ergebnis, Funktionär, Starter etc.)
+* 406 Media-Type wird nicht unterstützt
 * 601 Token abgelehnt
 * 602 Veranstaltung bereits hochgeladen und Datensatz geschlossen
 * 603 Ergebnisupload nach Frist, Turnier wird der nächsten Woche
