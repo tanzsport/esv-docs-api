@@ -928,8 +928,10 @@ WDSF-Paaren optional) [id]
 Nachmeldung, Aufsteiger = 4) [meldungsTyp]
 * Anzahl Sterne (gesetzte Paare) [sterne]
 * Startgruppe (gem. Schlüsselverzeichnis) [startgruppe] – ab Level 2
-** Hier muss die in der Startliste angegebene Startgruppe angegeben
-werden.
+** Hier muss der ursprüngliche in der Startliste angegebene Wert
+angegebene werden – nicht die Startgruppe, die bei der Berechnung nach
+Anhang 5 verwendet wurde (bei einem Jug-Starter im kombinierten Hgr/Hgr
+II-Turnier also Jug, nicht Hgr)
 * Startklasse (gem. Schlüsselverzeichnis) [startklasse] – ab Level 2
 ** Hier muss die zum Zeitpunkt des Turniers gültige Startklasse des
 Starters angegeben werden.
