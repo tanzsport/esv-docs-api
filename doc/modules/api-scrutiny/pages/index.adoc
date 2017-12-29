@@ -1186,7 +1186,7 @@ Duo, SmallGroup, FormationJMD
 
 DM (Deutsche Meisterschaft), DP (Deutschlandpokal), DC (Deutschlandcup),
 RLT (Rangliste), +
-RSRLT (Rising Star Rangliste), GM (Gebietsmeisterschaft), LM
+RS (Rising Star Rangliste), GM (Gebietsmeisterschaft), LM
 (Landesmeisterschaft), OT (Offenes Turnier), ET (Einladungsturnier), IET
 (Int. Einladungsturnier), IM (Int. Meisterschaft), IT (Int. Turnier),
 PDT (PD Trophy), LT (Ligaturnier), IMK (Int. Länderkampf Mannschaft), MK
