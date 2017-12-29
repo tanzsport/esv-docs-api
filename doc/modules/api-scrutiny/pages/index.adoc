@@ -914,8 +914,8 @@ abgelegt.
 * Starter-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei WDSF-Paaren
 optional) [id]
 * Startnummer [startNr]
-* Personen (Array, enthält bei Teamwettbewerben alle Starter, die
-tatsächlich getanzt haben)
+* Personen (Array, enthält bei Teamwettbewerben alle Aktiven des
+Starters, die tatsächlich getanzt haben)
 ** Personen-ID (Pflicht bei DTV- und Grenzverkehrs-Paaren, bei
 WDSF-Paaren optional) [id]
 ** Vorname [vorname]
