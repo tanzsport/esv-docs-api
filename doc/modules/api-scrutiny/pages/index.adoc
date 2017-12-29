@@ -867,9 +867,9 @@ konfiguriert)
 * Chairman (optional) (Array) [ch]
 ** Analog WR-Einzelement
 ** In der ESV wird nur der erste Eintrag verarbeitet
-* Moderatoren (optional) (Array) [moderatoren]
+* Moderatoren (optional) (Array) [moderatoren] – ab Level 2
 ** Analog WR-Einzelelement; ID-Angabe ist nicht verpflichtend.
-* Protokollführer (optional) (Array) [protokoll]
+* Protokollführer (optional) (Array) [protokoll] – ab Level 2
 ** Analog WR-Einzelelement; ID-Angabe ist nicht verpflichtend.
 * Vorkommnisse (optional) [vorkommnisse]
 * Beginnzeit (ISO8601) [beginn]
