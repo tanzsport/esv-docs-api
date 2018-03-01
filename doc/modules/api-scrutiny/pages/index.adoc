@@ -883,25 +883,29 @@ konfiguriert)
 * Vorkommnisse (optional) [vorkommnisse]
 * Beginnzeit (ISO8601) [beginn]
 * Endzeit (ISO8601) [ende]
-* Array Rundenablauf (NULL für Upload von nur-Startlisten) [ablauf]
-** Schlüsselwerte: 1, R, 2, 3, 4, 5, 6, 7, 8, 9, F, SR +
-(Redance = R, bei 1.VR = 1A, bei 2.VR = 1B, bei Formations A-Finale =
+* Arrays für Ablauf von normalen Runden [ablauf] und Stichrunden
+[stichrunden] (NULL für Upload von nur-Startlisten)
+** Runde mit Schlüsselwerten 1, 1A, 1B, R, 2, 3, 4, 5, 6, 7, 8, 9, F,
+FA, FB (Werte bis hier nur im Array [ablauf]), PSR, RSR (diese Werte nur
+im Array [stichrunden])
+*** Redance = R, bei 1.VR = 1A, bei 2.VR = 1B, bei Formations A-Finale =
 FA, bei B-Finale = FB, Stichrunde bei Gruppen- und
-Formationswettbewerben = SR) [runde]
-*** je Stichrunde um Platz X wird das Array um ein Element SR erweitert
-** Wertungstyp [typ] +
-(Kreuze {0..1} = K, Mannschaftspunkte {1..1,5..2..2,5..3} = M,
+Formationswettbewerben mit Auswirkung auf das Ergebnis = PSR,
+Stichrunden bei Gruppen- und Formationswettbewerben ohne Auswirkung auf
+das Ergebnis z.B. bei Relegation = RSR
+** Wertungstyp [typ]
+*** Kreuze {0..1} = K, Mannschaftspunkte {1..1,5..2..2,5..3} = M,
 Finalplätze {1..x} = P, FormationswertungKreuze = FK,
 FormationswertungPlätze = FP, JMD-WertungenKreuze = JK,
-JMD-WertungenPlätze = JP, JudgingSystem alle Versionen inkl. AJS = JS)
-** Platz [platz] – ab Level 2 +
-(Platz für den die Stichrunde durchgeführt wurde; NULL für alle
-Rundentypen außer SR) – Achtung, es gibt „echte“ Stichrunden (mit
-Auswirkungen auf das Gesamtergebnis des Turniers z.B. Stichrunden um
-Platz 1 bei DM oder Plätze bei Regionalmeisterschaften) oder
-Relegationsrunden, bei denen das Gesamtergebnis des Turniers nicht
-verändert wird (Austanzen der Relegation zwischen 1. und 2. Bundesliga –
-nur JMD)
+JMD-WertungenPlätze = JP, JudgingSystem alle Versionen inkl. AJS = JS
+** Platz [platz] – ab Level 2
+*** Platz für den die Stichrunde durchgeführt wurde; NULL für alle
+Rundentypen außer PSR und RSR) – Achtung, es gibt „echte“ Stichrunden
+(PSR, mit Auswirkungen auf das Gesamtergebnis des Turniers z.B.
+Stichrunden um Platz 1 bei DM oder Plätze bei Regionalmeisterschaften)
+oder Relegationsrunden (RSR), bei denen das Gesamtergebnis des Turniers
+nicht verändert wird (Austanzen der Relegation zwischen 1. und 2.
+Bundesliga – nur JMD)
 ** Array Startreihenfolge (nur Gruppen- und Formationswettbewerbe
 St/Lat/JMD sowie Einzelwettbewerbe JMD; Startnummern der Starter in
 Reihenfolge des Starts in der jeweiligen Runde) [startreihenfolge] – ab
@@ -975,11 +979,11 @@ Disqualifikation innerhalb dieses Turnieres erfolgt ist. Dabei ist zu
 beachten, dass es für Paare möglich ist, innerhalb eines Turnieres in
 einer Runde erst verwarnt und in einer späteren Runde disqualifiziert zu
 werden (in diesem Fall wird vd=2 übertragen).
-* Wertung (Array mit N = Anzahl Runden Elementen; nicht getanzte Runden
-werden als NULL übertragen, Runden nach Ausscheiden werden gar nicht
-übertragen; werden Tänze in der jeweiligen Runde nicht getanzt, ist das
-jeweilige Wertungselement mit NULL anzugeben; Starter, die nicht an
-Stichrunden teilgenommen haben, gelten als ausgeschieden) [wertung]
+* Wertungen für Runden aus Rundenablauf (Array mit N = Anzahl Runden
+Elementen; nicht getanzte Runden werden als NULL übertragen, Runden nach
+Ausscheiden werden gar nicht übertragen; werden Tänze in der jeweiligen
+Runde nicht getanzt, ist das jeweilige Wertungselement mit NULL
+anzugeben; Stichrundenwertungen werden hier nicht angegeben!) [wertung]
 ** Vorrundenwertung (nur Kreuz+Mannschaftspunkt-Wertungen)
 *** Array WR
 **** Array Tänze+1
@@ -995,6 +999,14 @@ Struktur der Vorrundenwertung verwendet)
 ***** WR1-x: Non-signed Byte für Wertung
 ***** WR+1: Platzziffer
 ***** WR+2: Platzziffer Summe
+* Stichrundenwertung (nur eine möglich pro Starter, ansonsten NULL)
+[stichrundenwertung] – ab Level 2
+** 0-basierter Index der Stichrunde aus dem Stichrunden-Ablauf
+[stichrunde]
+** erhaltene Wertungen [wertung]; Struktur wie Endrundenwertung in den
+Wertungen der normalen Runden, d.h. Array von Arrays; da aktuell nur für
+Formationen und Gruppen relevant enthält das äußere Array nur ein
+inneres Array für den einzigen Tanz der Stichrunde
 
 *Einmal*:
 
@@ -1028,10 +1040,8 @@ teilnehmenden Starter aus dem Starter-Array)
 ****** Anzahl [anzahl]
 ****** Summe (optional, sonst NULL) [summe]
 **** Platz (sofern in Regel 11 bestimmt, sonst NULL)
-* Array Stichrundetabellen (ab Schnittstellen-Level 2; Reihenfolge aus
-Rundenablauf bezogen nur auf die Stichrunden, d.h. die erste Stichrunde
-hat Index 0; wenn keine Stichrunden durchgeführt wurden NULL)
-[stichrundentabellen]
+* Array Stichrundentabellen (ab Schnittstellen-Level 2; Reihenfolge aus Rundenablauf;
+wenn keine Stichrunden durchgeführt wurden NULL) [stichrundentabellen]
 ** Struktur der Einzelelemente wie bei Endrundentabellen
 
 Bei Startern eines anderen Staates, die keine Paar-ID bzw. Partner/in-ID
@@ -1265,9 +1275,11 @@ LW, TG, WW, SF, QU, SB, CC, RB, PD, JV, STD, LAT, JMD, JAZZ, DF, SA
 
 ==== Runden
 
-1, R, 2, 3, 4, 5, 6, 7, 8, 9, F, SR +
+1, 1A, 1B, R, 2, 3, 4, 5, 6, 7, 8, 9, F, FA, FB, PSR, RSR +
 (Redance=R, bei 1.VR=1A, bei 2.VR=1B, bei Formations A-Finale=FA, bei
-B-Finale=FB, Stichrunde bei Gruppen- und Formationswettbewerben=SR)
+B-Finale=FB, Stichrunde bei Gruppen- und Formationswettbewerben mit
+Ergebnisrelevanz = PSR, Stichrunde bei Gruppen- und
+Formationswettbewerben ohne Ergebnisrelevanz nur für Relegation = RSR)
 
 ==== Wertungstyp
 
@@ -1283,7 +1295,9 @@ JP (JMD-WertungenPlätze), JS (JudgingSystem alle Versionen inkl. AJS)
 * 403 Login inkorrekt
 * 400 Datenkonstrukt ungültig (Bad request)
 * 404 Ressource existiert nicht (Ergebnis, Funktionär, Starter etc.)
+* 405 Ergebnisupload erst mit Turnierbeginn möglich
 * 406 Media-Type wird nicht unterstützt
+* 415 Neuere Version des Turnierprogramms erforderlich
 * 601 Token abgelehnt
 * 602 Veranstaltung bereits hochgeladen und Datensatz geschlossen
 * 603 Ergebnisupload nach Frist, Turnier wird der nächsten Woche
