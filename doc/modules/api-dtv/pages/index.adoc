@@ -1,4 +1,4 @@
-= Schnittstellen DTV-Webseite
+= Schnittstellen DTV
 
 == Änderungshistorie
 
@@ -6,7 +6,7 @@
 
 * Dokumente gesplittet und Interfacereihenfolge überarbeitet
 
-== DTV-Webseite
+== Webseite
 
 === Verbände (lesend, Liste)
 
