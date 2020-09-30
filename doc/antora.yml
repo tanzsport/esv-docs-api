@@ -1,6 +1,6 @@
 name: api
 title: API
-version: "2.0-wip"
+version: "2.0.0-wip"
 start_page: api-scrutiny:index.adoc
 nav:
   - modules/api-scrutiny/nav.adoc
